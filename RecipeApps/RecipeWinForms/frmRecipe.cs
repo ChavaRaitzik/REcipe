@@ -30,8 +30,8 @@ namespace RecipeWinForms
             WindowsFormsUtility.SetListBinding(lstCuisineName, dtcuisine, dtrecipe, "Cuisine");
             WindowsFormsUtility.SetControlBinding(txtCalories, dtrecipe);
             WindowsFormsUtility.SetControlBinding(txtDateDrafted, dtrecipe);
-            WindowsFormsUtility.SetControlBinding(txtDatePublished, dtrecipe);
-            WindowsFormsUtility.SetControlBinding(txtDateArchived, dtrecipe);
+            WindowsFormsUtility.SetControlBinding(lblDatePublished, dtrecipe);
+            WindowsFormsUtility.SetControlBinding(lblDateArchived, dtrecipe);
             WindowsFormsUtility.SetControlBinding(lblRecipeStatus, dtrecipe);
             WindowsFormsUtility.SetControlBinding(lblRecipePic, dtrecipe);
             this.Show();
@@ -57,7 +57,7 @@ namespace RecipeWinForms
             else
             {
                 sql = "Insert Recipe(StaffId, CuisineId, RecipeName, Calories, DateDrafted) ";
-                sql += $"select '{r["RecipeName"]}', {r["StaffId"]}, {r["CuisineId"]}, {r["Calories"]}, '{r["DateDrafted"]}' {r["RecipeId"]}";
+                sql += $"select {r["StaffId"]}, {r["CuisineId"]}, '{r["RecipeName"]}', {r["Calories"]}, '{r["DateDrafted"]}'";
             }
             SQLUtility.ExecuteSql(sql);
         }

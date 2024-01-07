@@ -34,8 +34,6 @@
             lblCaptionDatePublished = new Label();
             lblCaptionDateArchived = new Label();
             lblCaptionRecipeStatus = new Label();
-            txtDateArchived = new TextBox();
-            txtDatePublished = new TextBox();
             txtDateDrafted = new TextBox();
             txtCalories = new TextBox();
             lblCaptionRecipePic = new Label();
@@ -50,6 +48,8 @@
             lstCuisineName = new ComboBox();
             lblRecipeStatus = new Label();
             lblRecipePic = new Label();
+            lblDatePublished = new Label();
+            lblDateArchived = new Label();
             tblMain.SuspendLayout();
             tblButtons.SuspendLayout();
             SuspendLayout();
@@ -67,8 +67,6 @@
             tblMain.Controls.Add(lblCaptionDatePublished, 0, 5);
             tblMain.Controls.Add(lblCaptionDateArchived, 0, 6);
             tblMain.Controls.Add(lblCaptionRecipeStatus, 0, 7);
-            tblMain.Controls.Add(txtDateArchived, 1, 6);
-            tblMain.Controls.Add(txtDatePublished, 1, 5);
             tblMain.Controls.Add(txtDateDrafted, 1, 4);
             tblMain.Controls.Add(txtCalories, 1, 3);
             tblMain.Controls.Add(lblCaptionRecipePic, 0, 8);
@@ -81,6 +79,8 @@
             tblMain.Controls.Add(lstCuisineName, 1, 2);
             tblMain.Controls.Add(lblRecipeStatus, 1, 7);
             tblMain.Controls.Add(lblRecipePic, 1, 8);
+            tblMain.Controls.Add(lblDatePublished, 1, 5);
+            tblMain.Controls.Add(lblDateArchived, 1, 6);
             tblMain.Location = new Point(0, 0);
             tblMain.Margin = new Padding(4, 5, 4, 5);
             tblMain.Name = "tblMain";
@@ -157,24 +157,6 @@
             lblCaptionRecipeStatus.Size = new Size(151, 31);
             lblCaptionRecipeStatus.TabIndex = 7;
             lblCaptionRecipeStatus.Text = "Recipe Status";
-            // 
-            // txtDateArchived
-            // 
-            txtDateArchived.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtDateArchived.BorderStyle = BorderStyle.FixedSingle;
-            txtDateArchived.Location = new Point(226, 392);
-            txtDateArchived.Name = "txtDateArchived";
-            txtDateArchived.Size = new Size(602, 34);
-            txtDateArchived.TabIndex = 15;
-            // 
-            // txtDatePublished
-            // 
-            txtDatePublished.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtDatePublished.BorderStyle = BorderStyle.FixedSingle;
-            txtDatePublished.Location = new Point(226, 329);
-            txtDatePublished.Name = "txtDatePublished";
-            txtDatePublished.Size = new Size(602, 34);
-            txtDatePublished.TabIndex = 14;
             // 
             // txtDateDrafted
             // 
@@ -328,6 +310,26 @@
             lblRecipePic.Size = new Size(602, 28);
             lblRecipePic.TabIndex = 26;
             // 
+            // lblDatePublished
+            // 
+            lblDatePublished.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblDatePublished.AutoSize = true;
+            lblDatePublished.BackColor = Color.White;
+            lblDatePublished.Location = new Point(226, 315);
+            lblDatePublished.Name = "lblDatePublished";
+            lblDatePublished.Size = new Size(602, 28);
+            lblDatePublished.TabIndex = 27;
+            // 
+            // lblDateArchived
+            // 
+            lblDateArchived.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblDateArchived.AutoSize = true;
+            lblDateArchived.BackColor = Color.White;
+            lblDateArchived.Location = new Point(226, 378);
+            lblDateArchived.Name = "lblDateArchived";
+            lblDateArchived.Size = new Size(602, 28);
+            lblDateArchived.TabIndex = 28;
+            // 
             // frmRecipe
             // 
             AutoScaleDimensions = new SizeF(11F, 28F);
@@ -355,8 +357,6 @@
         private Label lblCaptionDateArchived;
         private Label lblCaptionRecipeStatus;
         private TextBox txtDateDrafted;
-        private TextBox txtDatePublished;
-        private TextBox txtDateArchived;
         private TextBox txtCalories;
         private Label lblCaptionRecipePic;
         private Label lblCaptionRecipeName;
@@ -368,5 +368,7 @@
         private ComboBox lstCuisineName;
         private Label lblRecipeStatus;
         private Label lblRecipePic;
+        private Label lblDatePublished;
+        private Label lblDateArchived;
     }
 }
