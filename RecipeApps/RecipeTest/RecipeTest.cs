@@ -82,6 +82,37 @@ namespace RecipeTest
         }
 
         [Test]
+
+        public void ChangeExistingRecipeToInvalidData()
+        {
+            int recipeid = GetExistingRecipeId();
+            Assume.That(recipeid > 0, "No recipes in DB, can't run test");
+            int cuisineid = SQLUtility.GetFirstColumnFirstRowValue("Select r.cuisineid from recipe r where r.recipeid = " + recipeid);
+            string recipename = SQLUtility.GetFirstColumnFirstRowString("Select r.recipename from recipe r where r.recipeid = " + recipeid).ToString();
+            int calories = SQLUtility.GetFirstColumnFirstRowValue("Select r.calories from recipe r where r.recipeid = " + recipeid);
+            string datedrafted = SQLUtility.GetFirstColumnFirstRowString("Select r.datedrafted from recipe r where r.recipeid = " + recipeid).ToString();
+            TestContext.WriteLine("Recipe with recipeid " + recipeid + ": recipename = " + recipename + ", calories = " + calories + ", datedrafted = " + datedrafted);
+            string datedraftedchanged = SQLUtility.GetFirstColumnFirstRowString("Select GetDate() + 1").ToString(); ;
+            string recipenamechanged = SQLUtility.GetFirstColumnFirstRowString("Select r.recipename from recipe r where r.recipeid <> " + recipeid).ToString();
+
+            TestContext.WriteLine("For recipe with recipeid " + recipeid + ": try to change to invalid data: recipename to a used recipe name (not unique), calories to 0, datedrafted to later than the current date");
+            DataTable dt = Recipe.Load(recipeid);
+
+            dt.Rows[0]["recipename"] = recipenamechanged;
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Save(dt));
+            TestContext.WriteLine(ex.Message);
+            dt.Rows[0]["recipename"] = recipename;
+            dt.Rows[0]["calories"] = 0;
+            Exception ex2 = Assert.Throws<Exception>(() => Recipe.Save(dt));
+            TestContext.WriteLine(ex2.Message);
+            dt.Rows[0]["calories"] = calories;
+            dt.Rows[0]["datedrafted"] = datedraftedchanged;
+            Exception ex3 = Assert.Throws<Exception>(()=> Recipe.Save(dt));
+            TestContext.WriteLine(ex3.Message);
+        }
+
+
+        [Test]
         public void Delete()
         {
             DataTable dt = SQLUtility.GetDataTable("Select top 1 r.recipeid, r.recipename from recipe r left join recipeingredient ri on r.recipeid = ri.recipeid left join instructions n on r.recipeid = n.recipeid where ri.ingredientid is null and n.instructionsid is null");
@@ -99,6 +130,24 @@ namespace RecipeTest
             DataTable dtafterdelete = SQLUtility.GetDataTable("Select * from recipe where recipeid = " + recipeid);
             Assert.IsTrue(dtafterdelete.Rows.Count == 0, "Record where recipeid = " + recipeid + ", " + recipename + " still exists in DB");
             TestContext.WriteLine("Record where recipeid = " + recipeid + ", " + recipename + " does not exist anymore in DB");
+        }
+
+        [Test]
+        public void DeleteRecipeWithForeignKeyReferences()
+        {
+            DataTable dt = SQLUtility.GetDataTable("Select top 1 r.recipeid, r.recipename from recipe r join recipeingredient ri on r.recipeid = ri.recipeid join instructions n on r.recipeid = n.recipeid");
+            int recipeid = 0;
+            string recipename = "";
+            if (dt.Rows.Count > 0)
+            {
+                recipeid = (int)dt.Rows[0]["recipeid"];
+                recipename = dt.Rows[0]["RecipeName"].ToString();
+            }
+            Assume.That(recipeid > 0, "No recipes with foreign key references, can't run test");
+            TestContext.WriteLine("Existing recipe with foreign key references, where recipeid = " + recipeid + ", " + recipename);
+            TestContext.WriteLine("Ensure that app cannot delete recipe where recipeid = " + recipeid + " since it has foreign key references");
+            Exception ex = Assert.Throws<Exception>(()=>Recipe.Delete(dt));
+            TestContext.WriteLine("Recipe where recipeid = " + recipeid + " was not deleted " + ex.Message);
         }
 
         [Test]
