@@ -57,17 +57,17 @@ Create table dbo.Recipe(
         constraint f_Staff_Recipe foreign key references Staff(StaffId), 
     CuisineId int not null 
         constraint f_Cuisine_Recipe foreign key references Cuisine(CuisineId), 
-    RecipeName varchar(75) not null 
+    RecipeName varchar(75) not null  
         constraint ck_Recipe_RecipeName_cannot_be_blank check(RecipeName <> '')
         constraint u_Recipe_RecipeName unique(RecipeName),
     Calories int not null 
         constraint ck_Recipe_Calories_must_be_greater_than_0 check(Calories > 0),
     DateDrafted datetime not null
-        constraint Recipe_DateDrafted_must_be_before_or_on_current_date check(DateDrafted <= getdate()),
+        constraint ck_Recipe_DateDrafted_must_be_before_or_on_current_date check(DateDrafted <= getdate()),
     DatePublished datetime null
-        constraint Recipe_DatePublished_must_be_before_or_on_current_date check(DatePublished <= getdate()), 
+        constraint ck_Recipe_DatePublished_must_be_before_or_on_current_date check(DatePublished <= getdate()), 
     DateArchived datetime null
-                constraint Recipe_DateArchived_must_be_before_or_on_current_date check(DateArchived <= getdate()), 
+                constraint ck_Recipe_DateArchived_must_be_before_or_on_current_date check(DateArchived <= getdate()), 
     RecipeStatus as case   
                         when DateArchived is null 
                         then case
@@ -128,7 +128,7 @@ Create table dbo.Meal(
         constraint u_Meal_MealName unique,
     MealActive bit default 1 not null, 
     DateCreated date not null
-        constraint Meal_DateCreated_must_be_before_or_on_current_date check(DateCreated <= getdate()), 
+        constraint ck_Meal_DateCreated_must_be_before_or_on_current_date check(DateCreated <= getdate()), 
     MealPic as concat('Meal','-',replace(MealName,' ','-'),'.jpg') persisted
 )
 
@@ -162,7 +162,7 @@ Create table dbo.Cookbook(
         constraint ck_Cookbook_Price_must_be_greater_than_0 check(Price > 0),
     CookbookActive bit default 1 not null,
     DateCreated date not null
-                constraint Cookbook_DateCreated_must_be_before_or_on_current_date check(DateCreated <= getdate()), 
+                constraint ck_Cookbook_DateCreated_must_be_before_or_on_current_date check(DateCreated <= getdate()), 
     CookbookPic as concat('Cookbook','-',replace(CookbookName,' ','-'),'.jpg') persisted
 )
 
