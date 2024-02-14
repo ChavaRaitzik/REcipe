@@ -3,20 +3,22 @@ declare @recipeid int
 
 Select top 1 @recipeid = r.RecipeId
 from Recipe r
---left
+left
 join RecipeIngredient ri 
 on r.RecipeId = ri.RecipeId
---left
+left
 join Instructions ins
 on r.RecipeId = ins.RecipeId
---left
+left
 join MealCourseRecipe mcr
 on r.RecipeId = mcr.RecipeId
---left
+left
 join CookbookRecipe cr
 on r.RecipeId = cr.RecipeId
---where mcr.MealCourseRecipeId is null
---and cr.CookbookRecipeId is null
+where mcr.MealCourseRecipeId is null
+and cr.CookbookRecipeId is null
+--and r.RecipeStatus = 'drafted'
+and r.RecipeStatus = 'published'
 order by r.RecipeId
 
 select 'Table' = 'Recipe', 'Id' = r.RecipeId, 'Title' = r.RecipeName from Recipe r where r.RecipeId = @recipeid

@@ -135,7 +135,22 @@ namespace RecipeTest
         [Test]
         public void DeleteRecipeWithForeignKeyReferences()
         {
-            DataTable dt = SQLUtility.GetDataTable("Select top 1 r.recipeid, r.recipename from recipe r join recipeingredient ri on r.recipeid = ri.recipeid join instructions n on r.recipeid = n.recipeid");
+            string sql = @"
+            Select top 1 r.recipeid, r.recipename 
+            from recipe r 
+            left join recipeingredient ri 
+            on r.recipeid = ri.recipeid 
+            left join instructions n on 
+            r.recipeid = n.recipeid
+            left join MealCourseRecipe mcr
+            on r.RecipeId = mcr.RecipeId
+            left join CookbookRecipe cr
+            on r.RecipeId = cr.RecipeId
+            where mcr.MealCourseRecipeId is null
+            and cr.CookbookRecipeId is null
+            and (r.RecipeStatus = 'published' or (r.RecipeStatus = 'archived' and GetDate() - r.DateArchived < 30))"
+            ;
+            DataTable dt = SQLUtility.GetDataTable(sql);
             int recipeid = 0;
             string recipename = "";
             if (dt.Rows.Count > 0)
@@ -143,9 +158,9 @@ namespace RecipeTest
                 recipeid = (int)dt.Rows[0]["recipeid"];
                 recipename = dt.Rows[0]["RecipeName"].ToString();
             }
-            Assume.That(recipeid > 0, "No recipes with foreign key references, can't run test");
-            TestContext.WriteLine("Existing recipe with foreign key references, where recipeid = " + recipeid + ", " + recipename);
-            TestContext.WriteLine("Ensure that app cannot delete recipe where recipeid = " + recipeid + " since it has foreign key references");
+            Assume.That(recipeid > 0, "No recipes with foreign key references that either has a status of published or archived for less than 30 days, can't run test");
+            TestContext.WriteLine("Existing recipe with foreign key references that either has a status of published or archived for less than 30 days, where recipeid = " + recipeid + ", " + recipename);
+            TestContext.WriteLine("Ensure that app cannot delete recipe where recipeid = " + recipeid + " since it has foreign key references and either has a status of published or archived for less than 30 days");
             Exception ex = Assert.Throws<Exception>(()=>Recipe.Delete(dt));
             TestContext.WriteLine("Recipe where recipeid = " + recipeid + " was not deleted " + ex.Message);
         }
