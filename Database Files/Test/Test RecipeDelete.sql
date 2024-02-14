@@ -25,7 +25,9 @@ select 'Table' = 'Recipe', 'Id' = r.RecipeId, 'Title' = r.RecipeName from Recipe
 union select 'Ingredient', ri.IngredientId, i.IngredientName from RecipeIngredient ri join Ingredient i on ri.IngredientId = i.IngredientId where ri.RecipeId = @recipeid 
 union select 'Instructions', ins.InstructionsId, ins.Instructions from Instructions ins where ins.RecipeId = @recipeid
 
-exec RecipeDelete @recipeid = @recipeid
+declare @return int, @message varchar(500)
+exec @return = RecipeDelete @recipeid = @recipeid, @message = @message output
+select @return, @message
 
 select 'Table' = 'Recipe', 'Id' = r.RecipeId, 'Title' = r.RecipeName from Recipe r where r.RecipeId = @recipeid
 union select 'Ingredient', ri.IngredientId, i.IngredientName from RecipeIngredient ri join Ingredient i on ri.IngredientId = i.IngredientId where ri.RecipeId = @recipeid 
