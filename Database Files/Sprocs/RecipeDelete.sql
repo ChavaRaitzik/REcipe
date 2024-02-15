@@ -6,9 +6,9 @@ as
 begin
 	declare @return int = 0
 
-	if exists(select * from Recipe r where r.RecipeId = @recipeid and ((r.RecipeStatus = 'published') or (r.RecipeStatus = 'archived' and (GETDATE() - r.DateArchived) < 30)))
+	if exists(select * from Recipe r where r.RecipeId = @recipeid and ((r.RecipeStatus = 'published') or (r.RecipeStatus = 'archived' and DateDiff(day, r.DateArchived, GETDATE()) < 30)))
 	begin
-		select @return = 1, @message = 'Can only delete recipe that is either has a status of drafted or archived for over 30 days.'
+		select @return = 1, @message = 'Can only delete recipe that either has a status of drafted or archived for over 30 days.'
 		goto finished
 	end
 
