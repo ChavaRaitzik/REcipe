@@ -115,7 +115,18 @@ namespace RecipeTest
         [Test]
         public void Delete()
         {
-            DataTable dt = SQLUtility.GetDataTable("Select top 1 r.recipeid, r.recipename from recipe r left join recipeingredient ri on r.recipeid = ri.recipeid left join instructions n on r.recipeid = n.recipeid where ri.ingredientid is null and n.instructionsid is null");
+            string sql = @"
+            Select top 1 r.recipeid, r.recipename 
+            from recipe r 
+            left join recipeingredient ri 
+            on r.recipeid = ri.recipeid 
+            left join instructions n 
+            on r.recipeid = n.recipeid 
+            where ri.ingredientid is null 
+            and n.instructionsid is null
+            and (r.RecipeStatus = 'drafted' or (r.RecipeStatus = 'archived' and DateDiff(day, r.DateArchived, GETDATE()) < 30))"
+            ;
+            DataTable dt = SQLUtility.GetDataTable(sql);
             int recipeid = 0;
             string recipename = "";
             if (dt.Rows.Count > 0)
@@ -123,8 +134,8 @@ namespace RecipeTest
                 recipeid = (int)dt.Rows[0]["recipeid"];
                 recipename = dt.Rows[0]["RecipeName"].ToString();
             }
-            Assume.That(recipeid > 0, "No recipes without ingredients or instructions, can't run test");
-            TestContext.WriteLine("Existing recipe without ingredients or instructions, where recipeid = " + recipeid + ", " + recipename);
+            Assume.That(recipeid > 0, "No recipes without ingredients or instructions that either has a status of drafted or archived for more than 30 days, can't run test");
+            TestContext.WriteLine("Existing recipe without ingredients or instructions, that either has a status of drafted or archived for more than 30 days, where recipeid = " + recipeid + ", " + recipename);
             TestContext.WriteLine("Ensure that app can delete recipe where recipeid = " + recipeid);
             Recipe.Delete(dt);
             DataTable dtafterdelete = SQLUtility.GetDataTable("Select * from recipe where recipeid = " + recipeid);
@@ -134,6 +145,33 @@ namespace RecipeTest
 
         [Test]
         public void DeleteRecipeWithForeignKeyReferences()
+        {
+            string sql = @"
+            Select top 1 r.recipeid, r.recipename 
+            from recipe r 
+            join recipeingredient ri 
+            on r.recipeid = ri.recipeid 
+            join instructions n 
+            on r.recipeid = n.recipeid
+            and (r.RecipeStatus = 'drafted' or (r.RecipeStatus = 'archived' and DateDiff(day, r.DateArchived, GETDATE()) > 30))"
+            ;
+            DataTable dt = SQLUtility.GetDataTable(sql);
+            int recipeid = 0;
+            string recipename = "";
+            if (dt.Rows.Count > 0)
+            {
+                recipeid = (int)dt.Rows[0]["recipeid"];
+                recipename = dt.Rows[0]["RecipeName"].ToString();
+            }
+            Assume.That(recipeid > 0, "No recipes with foreign key references, can't run test");
+            TestContext.WriteLine("Existing recipe with foreign key references, where recipeid = " + recipeid + ", " + recipename);
+            TestContext.WriteLine("Ensure that app cannot delete recipe where recipeid = " + recipeid + " since it has foreign key references");
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(dt));
+            TestContext.WriteLine("Recipe where recipeid = " + recipeid + " was not deleted: " + ex.Message);
+        }
+
+        [Test]
+        public void DeleteRecipeWithStatusPublishedOrArchivedForLessThan30Days()
         {
             string sql = @"
             Select top 1 r.recipeid, r.recipename 
@@ -148,7 +186,7 @@ namespace RecipeTest
             on r.RecipeId = cr.RecipeId
             where mcr.MealCourseRecipeId is null
             and cr.CookbookRecipeId is null
-            and (r.RecipeStatus = 'published' or (r.RecipeStatus = 'archived' and GetDate() - r.DateArchived < 30))"
+            and (r.RecipeStatus = 'published' or (r.RecipeStatus = 'archived' and DateDiff(day, r.DateArchived, GETDATE()) < 30))"
             ;
             DataTable dt = SQLUtility.GetDataTable(sql);
             int recipeid = 0;
@@ -158,11 +196,11 @@ namespace RecipeTest
                 recipeid = (int)dt.Rows[0]["recipeid"];
                 recipename = dt.Rows[0]["RecipeName"].ToString();
             }
-            Assume.That(recipeid > 0, "No recipes with foreign key references that either has a status of published or archived for less than 30 days, can't run test");
-            TestContext.WriteLine("Existing recipe with foreign key references that either has a status of published or archived for less than 30 days, where recipeid = " + recipeid + ", " + recipename);
-            TestContext.WriteLine("Ensure that app cannot delete recipe where recipeid = " + recipeid + " since it has foreign key references and either has a status of published or archived for less than 30 days");
+            Assume.That(recipeid > 0, "No recipes that either has a status of published or archived for less than 30 days, can't run test");
+            TestContext.WriteLine("Existing recipe  that either has a status of published or archived for less than 30 days, where recipeid = " + recipeid + ", " + recipename);
+            TestContext.WriteLine("Ensure that app cannot delete recipe where recipeid = " + recipeid + " since it either has a status of published or archived for less than 30 days");
             Exception ex = Assert.Throws<Exception>(()=>Recipe.Delete(dt));
-            TestContext.WriteLine("Recipe where recipeid = " + recipeid + " was not deleted " + ex.Message);
+            TestContext.WriteLine("Recipe where recipeid = " + recipeid + " was not deleted: " + ex.Message);
         }
 
         [Test]
