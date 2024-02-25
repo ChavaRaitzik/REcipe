@@ -6,6 +6,7 @@ namespace RecipeWinForms
     {
 
         DataTable dtrecipe;
+        BindingSource bindsource = new BindingSource();
         public frmRecipe()
         {
             InitializeComponent();
@@ -16,21 +17,22 @@ namespace RecipeWinForms
         public void ShowForm(int recipeid)
         {
             dtrecipe = Recipe.Load(recipeid);
+            bindsource.DataSource = dtrecipe;
             if (recipeid == 0)
             {
                 dtrecipe.Rows.Add();
             }
             DataTable dtstaff = Recipe.GetStaff();
             DataTable dtcuisine = Recipe.GetCuisines();
-            WindowsFormsUtility.SetControlBinding(txtRecipeName, dtrecipe);
+            WindowsFormsUtility.SetControlBinding(txtRecipeName, bindsource);
             WindowsFormsUtility.SetListBinding(lstUsername, dtstaff, dtrecipe, "Staff");
             WindowsFormsUtility.SetListBinding(lstCuisineName, dtcuisine, dtrecipe, "Cuisine");
-            WindowsFormsUtility.SetControlBinding(txtCalories, dtrecipe);
-            WindowsFormsUtility.SetControlBinding(txtDateDrafted, dtrecipe);
-            WindowsFormsUtility.SetControlBinding(lblDatePublished, dtrecipe);
-            WindowsFormsUtility.SetControlBinding(lblDateArchived, dtrecipe);
-            WindowsFormsUtility.SetControlBinding(lblRecipeStatus, dtrecipe);
-            WindowsFormsUtility.SetControlBinding(lblRecipePic, dtrecipe);
+            WindowsFormsUtility.SetControlBinding(txtCalories, bindsource);
+            WindowsFormsUtility.SetControlBinding(lblDateDrafted, bindsource);
+            WindowsFormsUtility.SetControlBinding(lblDatePublished, bindsource);
+            WindowsFormsUtility.SetControlBinding(lblDateArchived, bindsource);
+            WindowsFormsUtility.SetControlBinding(lblRecipeStatus, bindsource);
+            WindowsFormsUtility.SetControlBinding(lblRecipePic, bindsource);
             this.Show();
         }
 
@@ -40,6 +42,7 @@ namespace RecipeWinForms
             try
             {
                 Recipe.Save(dtrecipe);
+                bindsource.ResetBindings(false);
             }
             catch (Exception ex)
             {
@@ -84,5 +87,9 @@ namespace RecipeWinForms
             Delete();
         }
 
+        private void lstUsername_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

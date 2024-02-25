@@ -25,21 +25,19 @@ namespace RecipeTest
             Assume.That(cuisineid > 0, "No cuisines in DB, can't run test");
             string recipename = "New delicious food created " + SQLUtility.GetFirstColumnFirstRowString("Select getdate()");
             int calories = 100;
-            string datedrafted = SQLUtility.GetFirstColumnFirstRowString("Select getdate()");
 
-            TestContext.WriteLine("Insert recipe: recipename = " + recipename + ", staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", datedrafted = " + datedrafted);
+            TestContext.WriteLine("Insert recipe: recipename = " + recipename + ", staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories);
 
             r["staffid"] = staffid;
             r["cuisineid"] = cuisineid;
             r["recipename"] = recipename;
             r["calories"] = calories;
-            r["datedrafted"] = datedrafted;
             Recipe.Save(dt);
 
-            int newrecipeid = SQLUtility.GetFirstColumnFirstRowValue("Select recipeid from Recipe where datedrafted = " + "'" + datedrafted + "'");
+            int newrecipeid = SQLUtility.GetFirstColumnFirstRowValue("Select recipeid from Recipe where recipename = " + "'" + recipename + "'");
 
-            Assert.IsTrue(newrecipeid > 0, "Recipe with recipename = " + recipename + "staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", datedrafted = " + datedrafted + " is not found in db");
-            TestContext.WriteLine("Recipe with staffid = " + staffid + ", cuisineid = " + cuisineid + ", recipename = " + recipename + ", calories = " + calories + ", datedrafted = " + datedrafted + ", is found in db with pk value = " + newrecipeid);
+            Assert.IsTrue(newrecipeid > 0, "Recipe with recipename = " + recipename + "staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", is not found in db");
+            TestContext.WriteLine("Recipe with staffid = " + staffid + ", cuisineid = " + cuisineid + ", recipename = " + recipename + ", calories = " + calories + ", is found in db with pk value = " + newrecipeid);
         }
 
         [Test]
