@@ -5,7 +5,8 @@ create or alter procedure dbo.RecipeGet(
 )
 as 
 begin
-	select r.RecipeId, r.StaffId, r.CuisineId, r.RecipeName, r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePic
+	select r.RecipeId, r.StaffId, r.CuisineId, r.RecipeName, r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePic,
+		RecipeInfo = dbo.RecipeInfo(r.RecipeId)
 	from Recipe r
 	where @recipeid = r.RecipeId
 	or @all = 1
