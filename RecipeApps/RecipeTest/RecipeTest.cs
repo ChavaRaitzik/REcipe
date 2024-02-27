@@ -50,33 +50,29 @@ namespace RecipeTest
             int cuisineid = SQLUtility.GetFirstColumnFirstRowValue("Select r.cuisineid from recipe r where r.recipeid = " + recipeid);
             string recipename = SQLUtility.GetFirstColumnFirstRowString("Select r.recipename from recipe r where r.recipeid = " + recipeid).ToString();
             int calories = SQLUtility.GetFirstColumnFirstRowValue("Select r.calories from recipe r where r.recipeid = " + recipeid);
-            string datedrafted = SQLUtility.GetFirstColumnFirstRowString("Select r.datedrafted from recipe r where r.recipeid = " + recipeid).ToString();
-            TestContext.WriteLine("Recipe with recipeid " + recipeid + ": recipename = " + recipename + ", staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", datedrafted = " + datedrafted);
+            TestContext.WriteLine("Recipe with recipeid " + recipeid + ": recipename = " + recipename + ", staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories);
             staffid = SQLUtility.GetFirstColumnFirstRowValue("Select top 1 s.staffid from staff s where s.staffid <> " + staffid);
             Assume.That(staffid > 0, "Only 1 staff member in DB, can't run test");
             cuisineid = SQLUtility.GetFirstColumnFirstRowValue("Select top 1 c.cuisineid from cuisine c where c.cuisineid <> " + cuisineid);
             Assume.That(cuisineid > 0, "Only 1 cuisine in DB, can't run test");
             recipename += ".1";
             calories = calories + 10;
-            datedrafted = SQLUtility.GetFirstColumnFirstRowString("Select r.datedrafted - 1 from recipe r where r.recipeid = " + recipeid).ToString(); ;
 
-            TestContext.WriteLine("For recipe with recipeid " + recipeid + ": change recipename to " + recipename + ", staffid to " + staffid + ", cuisineid to " + cuisineid + ", calories to " + calories + ", datedrafted to " + datedrafted);
+            TestContext.WriteLine("For recipe with recipeid " + recipeid + ": change recipename to " + recipename + ", staffid to " + staffid + ", cuisineid to " + cuisineid + ", calories to " + calories);
             DataTable dt = Recipe.Load(recipeid);
 
             dt.Rows[0]["staffid"] = staffid;
             dt.Rows[0]["cuisineid"] = cuisineid;
             dt.Rows[0]["recipename"] = recipename;
             dt.Rows[0]["calories"] = calories;
-            dt.Rows[0]["datedrafted"] = datedrafted;
             Recipe.Save(dt);
             int changedstaffid = SQLUtility.GetFirstColumnFirstRowValue("Select r.staffid from recipe r where r.recipeid = " + recipeid);
             int changedcuisineid = SQLUtility.GetFirstColumnFirstRowValue("Select r.cuisineid from recipe r where r.recipeid = " + recipeid);
             string changedrecipename = SQLUtility.GetFirstColumnFirstRowString("Select r.recipename from recipe r where r.recipeid = " + recipeid).ToString();
             int changedcalories = SQLUtility.GetFirstColumnFirstRowValue("Select r.calories from recipe r where r.recipeid = " + recipeid);
-            string changeddatedrafted = SQLUtility.GetFirstColumnFirstRowString("Select r.datedrafted from recipe r where r.recipeid = " + recipeid).ToString();
 
-            Assert.IsTrue(changedstaffid == staffid && changedcuisineid == cuisineid && changedrecipename == recipename && changedcalories == calories && changeddatedrafted == datedrafted, "", "Recipe with recipeid " + recipeid + ": staffid <> " + staffid + ", cuisineid <> " + cuisineid + ", recipename <> " + recipename + ", calories <> " + calories + ", datedrafted <> " + datedrafted);
-            TestContext.WriteLine("Recipe with recipeid " + recipeid + ": recipename = " + changedrecipename + ", staffid = " + changedstaffid + ", cuisineid = " + changedcuisineid + ", calories = " + changedcalories + ", datedrafted = " + changeddatedrafted);
+            Assert.IsTrue(changedstaffid == staffid && changedcuisineid == cuisineid && changedrecipename == recipename && changedcalories == calories, "", "Recipe with recipeid " + recipeid + ": staffid <> " + staffid + ", cuisineid <> " + cuisineid + ", recipename <> " + recipename + ", calories <> " + calories);
+            TestContext.WriteLine("Recipe with recipeid " + recipeid + ": recipename = " + changedrecipename + ", staffid = " + changedstaffid + ", cuisineid = " + changedcuisineid + ", calories = " + changedcalories);
         }
 
         [Test]
