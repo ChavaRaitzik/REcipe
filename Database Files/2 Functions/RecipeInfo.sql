@@ -4,7 +4,7 @@ as
 begin
 	declare @value varchar(165) = ''
 
-	select @value = concat('[', r.RecipeName, ']', ' ([', c.CuisineName, ']) has [', count(ri.IngredientId), '] ingredients and [', count(n.InstructionsId), '] steps.')
+	select @value = concat(r.RecipeName, ' (', c.CuisineName, ') has ', count(distinct ri.IngredientId), ' ingredients and ', count(distinct n.InstructionsId), ' steps.')
 	from Recipe r 
 	join Cuisine c 
 	on r.CuisineId = c.CuisineId
