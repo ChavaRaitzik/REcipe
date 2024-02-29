@@ -11,11 +11,10 @@ as
 begin
 	declare @return int = 0
 
-	select @RecipeId = isnull(@RecipeId, 0), @Calories = isnull(@Calories, 0)
+	select @RecipeId = isnull(@RecipeId, 0), @Calories = isnull(@Calories, 0), @DateDrafted = isnull(@DateDrafted, GetDate())
 
 	if @RecipeId = 0
 	begin
-		select @DateDrafted = '01/01/2000'
 
 		Insert Recipe(StaffId, CuisineId, RecipeName, Calories, DateDrafted)
 		values (@StaffId, @CuisineId, @RecipeName, @Calories, @DateDrafted)
