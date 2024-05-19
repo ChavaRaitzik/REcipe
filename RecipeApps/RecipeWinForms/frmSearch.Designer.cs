@@ -33,8 +33,8 @@
             lblRecipeName = new Label();
             txtRecipeName = new TextBox();
             btnSearch = new Button();
-            gRecipe = new DataGridView();
             btnNew = new Button();
+            gRecipe = new DataGridView();
             tblMain.SuspendLayout();
             tblSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gRecipe).BeginInit();
@@ -110,19 +110,8 @@
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(108, 39);
             btnSearch.TabIndex = 2;
-            btnSearch.Text = "Search";
+            btnSearch.Text = "&Search";
             btnSearch.UseVisualStyleBackColor = false;
-            // 
-            // gRecipe
-            // 
-            gRecipe.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gRecipe.Dock = DockStyle.Fill;
-            gRecipe.Location = new Point(3, 54);
-            gRecipe.Name = "gRecipe";
-            gRecipe.RowHeadersWidth = 51;
-            gRecipe.RowTemplate.Height = 29;
-            gRecipe.Size = new Size(782, 510);
-            gRecipe.TabIndex = 1;
             // 
             // btnNew
             // 
@@ -134,8 +123,19 @@
             btnNew.Name = "btnNew";
             btnNew.Size = new Size(77, 39);
             btnNew.TabIndex = 3;
-            btnNew.Text = "New";
+            btnNew.Text = "&New";
             btnNew.UseVisualStyleBackColor = false;
+            // 
+            // gRecipe
+            // 
+            gRecipe.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            gRecipe.Dock = DockStyle.Fill;
+            gRecipe.Location = new Point(3, 54);
+            gRecipe.Name = "gRecipe";
+            gRecipe.RowHeadersWidth = 51;
+            gRecipe.RowTemplate.Height = 29;
+            gRecipe.Size = new Size(782, 510);
+            gRecipe.TabIndex = 1;
             // 
             // frmSearch
             // 

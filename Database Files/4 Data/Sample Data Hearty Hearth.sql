@@ -115,7 +115,7 @@ on x.CuisineName = c.CuisineName
 
 ;
 with x as(
-   select RecipeName = 'Chocolate Chip Cookies', IngredientName = 'sugar', MeasurementName = 'cup', IngredientNum = 1, IngredientAmount = 1
+   select RecipeName = 'Chocolate Chip Cookies', IngredientName = 'sugar', MeasurementName = 'cup', IngredientNum = 1, Quantity = 1
    union select 'Chocolate Chip Cookies', 'oil', 'cup', 2, .5 
    union select 'Chocolate Chip Cookies', 'eggs', null, 3, 3
    union select 'Chocolate Chip Cookies', 'flour', 'cup', 4, 2
@@ -173,8 +173,8 @@ with x as(
    union select 'French Fries', 'salt', 'tsp', 3, 1
    union select 'French Fries', 'vinegar', 'tsp', 4, 1
 )
-Insert RecipeIngredient(RecipeId, IngredientId, MeasurementId, IngredientNum, IngredientAmount)
-select r.RecipeId, i.IngredientId, m.MeasurementId, x.IngredientNum, x.IngredientAmount
+Insert RecipeIngredient(RecipeId, IngredientId, MeasurementId, IngredientNum, Quantity)
+select r.RecipeId, i.IngredientId, m.MeasurementId, x.IngredientNum, x.Quantity
 from x 
 join Recipe r
 on x.RecipeName = r.RecipeName

@@ -1,4 +1,4 @@
-declare @Message varchar(500) = '', @return int, @recipeid int, @staffid int, @cuisineid int, @recipename varchar(75), @datedrafted datetime
+declare @Message varchar(500) = '', @return int, @recipeid int, @staffid int, @cuisineid int, @recipename varchar(75), @datedrafted datetime, @datepublished datetime, @datearchived datetime
 
 select top 1 @staffid = StaffId from Staff
 Select top 1 @cuisineid = CuisineId from Cuisine
@@ -11,6 +11,8 @@ exec @return = RecipeUpdate
 	@RecipeName = @recipename, 
 	@Calories = 250, 
 	@DateDrafted = @datedrafted output,
+	@DatePublished = @datepublished output,
+	@DateArchived =  @datearchived output,
 	@Message = @Message output
 
 select @return, @message

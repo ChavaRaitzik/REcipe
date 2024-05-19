@@ -28,13 +28,13 @@ union select 'hot water'
 
 ;
 with x as(
-   select RecipeName = 'Peppermint tea', IngredientName = 'hot water', MeasurementName = 'cup', IngredientNum = 1, IngredientAmount = 1
+   select RecipeName = 'Peppermint tea', IngredientName = 'hot water', MeasurementName = 'cup', IngredientNum = 1, Quantity = 1
    union select 'Peppermint tea', 'peppermint tea bag', null, 2, 1
    union select 'Peppermint tea', 'honey', 'tsp', 3, 2
 
 )
-Insert RecipeIngredient(RecipeId, IngredientId, MeasurementId, IngredientNum, IngredientAmount)
-select r.RecipeId, i.IngredientId, m.MeasurementId, x.IngredientNum, x.IngredientAmount
+Insert RecipeIngredient(RecipeId, IngredientId, MeasurementId, IngredientNum, Quantity)
+select r.RecipeId, i.IngredientId, m.MeasurementId, x.IngredientNum, x.Quantity
 from x 
 join Recipe r
 on x.RecipeName = r.RecipeName

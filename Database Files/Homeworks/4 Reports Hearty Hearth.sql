@@ -64,7 +64,7 @@ where r.RecipeName = 'slurpee'
 group by r.RecipeName, r.Calories, r.RecipePic
 
 --b) List of Ingredients
-select Ingredients = concat(ri.IngredientAmount, ' ', m.MeasurementName, ' ', i.IngredientName), i.IngredientPic
+select Ingredients = concat(ri.Quantity, ' ', m.MeasurementName, ' ', i.IngredientName), i.IngredientPic
 from Recipe r 
 join RecipeIngredient ri 
 on r.RecipeId = ri.RecipeId

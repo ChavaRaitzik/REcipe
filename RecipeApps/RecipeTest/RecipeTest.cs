@@ -1,7 +1,3 @@
-using NUnit.Framework.Internal;
-using RecipeSystems;
-using System.Data;
-
 namespace RecipeTest
 {
     public class RecipeTest
@@ -59,7 +55,7 @@ namespace RecipeTest
             calories = calories + 10;
 
             TestContext.WriteLine("For recipe with recipeid " + recipeid + ": change recipename to " + recipename + ", staffid to " + staffid + ", cuisineid to " + cuisineid + ", calories to " + calories);
-            DataTable dt = Recipe.Load(recipeid);
+            DataTable dt = Recipe.LoadRecipe(recipeid);
 
             dt.Rows[0]["staffid"] = staffid;
             dt.Rows[0]["cuisineid"] = cuisineid;
@@ -90,7 +86,7 @@ namespace RecipeTest
             string recipenamechanged = SQLUtility.GetFirstColumnFirstRowString("Select r.recipename from recipe r where r.recipeid <> " + recipeid).ToString();
 
             TestContext.WriteLine("For recipe with recipeid " + recipeid + ": try to change to invalid data: recipename to a used recipe name (not unique), calories to 0, datedrafted to later than the current date");
-            DataTable dt = Recipe.Load(recipeid);
+            DataTable dt = Recipe.LoadRecipe(recipeid);
 
             dt.Rows[0]["recipename"] = recipenamechanged;
             Exception ex = Assert.Throws<Exception>(() => Recipe.Save(dt));
@@ -205,7 +201,7 @@ namespace RecipeTest
             Assume.That(recipeid > 0, "No recipes in DB, can't run test");
             TestContext.WriteLine("Existing recipe where recipeid = " + recipeid + " and recipename = " + recipename);
             TestContext.WriteLine("Ensure that app loads recipe where recipeid = " + recipeid + " and recipename =  " + recipename);
-            DataTable dt = Recipe.Load(recipeid);
+            DataTable dt = Recipe.LoadRecipe(recipeid);
             int loadedid = (int)dt.Rows[0]["recipeid"];
             string loadedrecipename = dt.Rows[0]["recipename"].ToString();
             Assert.IsTrue(loadedid == recipeid && loadedrecipename == recipename, loadedid + " <> " + recipeid + " and " + loadedrecipename + " <> " + recipename);

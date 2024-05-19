@@ -4,7 +4,9 @@ declare @Message varchar(500) = '', @return int,
 	@CuisineId int ,
 	@RecipeName varchar (75),
 	@Calories int ,
-	@DateDrafted datetime 
+	@DateDrafted datetime,
+	@DatePublished datetime,
+	@DateArchived datetime
 
 select top 1
 	@RecipeId = RecipeId,
@@ -12,7 +14,9 @@ select top 1
 	@CuisineId = CuisineId,
 	@RecipeName = RecipeName,
 	@Calories = Calories,
-	@DateDrafted = DateDrafted
+	@DateDrafted = DateDrafted,
+	@DatePublished = DatePublished,
+	@DateArchived = DateArchived
 from Recipe 
 
 Select @RecipeName = REVERSE(@RecipeName), @Calories = @Calories + 1
@@ -24,6 +28,8 @@ exec @return = RecipeUpdate
 	@RecipeName = @RecipeName,
 	@Calories = @Calories,
 	@DateDrafted = @DateDrafted output,
+	@DatePublished = @DatePublished output,
+	@DateArchived = @DateArchived output,
 	@Message = @Message output
 
 select @return, @message

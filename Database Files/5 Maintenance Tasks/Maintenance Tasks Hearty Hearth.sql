@@ -103,8 +103,8 @@ select r.StaffId, r.CuisineId, concat(r.RecipeName, ' - Clone'), r.Calories, r.D
 from Recipe r 
 where r.RecipeName = 'Greek Salad'
 
-Insert RecipeIngredient(RecipeId, IngredientId, MeasurementId, IngredientNum, IngredientAmount)
-select (select r.RecipeId from Recipe r where r.RecipeName = 'Greek Salad - Clone'), ri.IngredientId, ri.MeasurementId, ri.IngredientNum, ri.IngredientAmount
+Insert RecipeIngredient(RecipeId, IngredientId, MeasurementId, IngredientNum, Quantity)
+select (select r.RecipeId from Recipe r where r.RecipeName = 'Greek Salad - Clone'), ri.IngredientId, ri.MeasurementId, ri.IngredientNum, ri.Quantity
 from RecipeIngredient ri  
 join Recipe r 
 on ri.RecipeId = r.RecipeId
@@ -158,9 +158,9 @@ The statement should include at least two measurement types, like the example ab
 Update r 
 --select r.RecipeName, r.Calories,
 set Calories = case m.MeasurementName
-				when 'cup' then r.Calories + (48*ri.IngredientAmount)
-				when 'tbsp' then r.Calories + (3*ri.IngredientAmount)
-				when 'tsp' then r.Calories + (1*ri.IngredientAmount)
+				when 'cup' then r.Calories + (48*ri.Quantity)
+				when 'tbsp' then r.Calories + (3*ri.Quantity)
+				when 'tsp' then r.Calories + (1*ri.Quantity)
 			end 
 from Ingredient n 
 join RecipeIngredient ri 
