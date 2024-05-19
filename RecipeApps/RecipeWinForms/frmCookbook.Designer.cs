@@ -37,7 +37,7 @@
             lblCookbookActive = new Label();
             txtCookbookName = new TextBox();
             txtPrice = new TextBox();
-            lstUsername = new ComboBox();
+            lstUser = new ComboBox();
             ckCookbookActive = new CheckBox();
             tblDateCreated = new TableLayoutPanel();
             lblCaptionDateCreated = new Label();
@@ -65,7 +65,7 @@
             tblMain.Controls.Add(lblCookbookActive, 0, 4);
             tblMain.Controls.Add(txtCookbookName, 1, 1);
             tblMain.Controls.Add(txtPrice, 1, 3);
-            tblMain.Controls.Add(lstUsername, 1, 2);
+            tblMain.Controls.Add(lstUser, 1, 2);
             tblMain.Controls.Add(ckCookbookActive, 1, 4);
             tblMain.Controls.Add(tblDateCreated, 2, 3);
             tblMain.Controls.Add(tblRecipe, 0, 5);
@@ -176,15 +176,15 @@
             txtPrice.Size = new Size(102, 34);
             txtPrice.TabIndex = 5;
             // 
-            // lstUsername
+            // lstUser
             // 
-            tblMain.SetColumnSpan(lstUsername, 2);
-            lstUsername.FormattingEnabled = true;
-            lstUsername.Location = new Point(265, 150);
-            lstUsername.Margin = new Padding(25, 15, 25, 15);
-            lstUsername.Name = "lstUsername";
-            lstUsername.Size = new Size(810, 36);
-            lstUsername.TabIndex = 3;
+            tblMain.SetColumnSpan(lstUser, 2);
+            lstUser.FormattingEnabled = true;
+            lstUser.Location = new Point(265, 150);
+            lstUser.Margin = new Padding(25, 15, 25, 15);
+            lstUser.Name = "lstUser";
+            lstUser.Size = new Size(810, 36);
+            lstUser.TabIndex = 3;
             // 
             // ckCookbookActive
             // 
@@ -305,7 +305,7 @@
         private Label lblCookbookActive;
         private TextBox txtCookbookName;
         private TextBox txtPrice;
-        private ComboBox lstUsername;
+        private ComboBox lstUser;
         private CheckBox ckCookbookActive;
         private TableLayoutPanel tblDateCreated;
         private Label lblCaptionDateCreated;

@@ -26,7 +26,8 @@ Create table dbo.Staff(
         constraint ck_Staff_LastName_cannot_be_blank check(LastName <> ''), 
     Username varchar(35) not null 
         constraint ck_Staff_UserName_cannot_be_blank check(UserName <> '')
-        constraint u_Staff_UserName unique
+        constraint u_Staff_UserName unique,
+	"User" as concat(FirstName, ' ', LastName) persisted
 )
 
 Create table dbo.Cuisine(

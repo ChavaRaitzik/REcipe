@@ -9,7 +9,7 @@
         BindingSource bindsource = new();
         string deletecolname = "deletecol";
         int recipeid = 0;
-
+        bool formloaded = false;
         public frmRecipe()
         {
             InitializeComponent();
@@ -20,7 +20,7 @@
             btnSaveSteps.Click += BtnSaveSteps_Click;
             gIngredients.CellContentClick += GIngredients_CellContentClick;
             gSteps.CellContentClick += GSteps_CellContentClick;
-            //this.Activated += FrmRecipe_Activated;
+            this.Activated += FrmRecipe_Activated;
             this.Shown += FrmRecipe_Shown;
             this.FormClosing += FrmRecipe_FormClosing;
         }
@@ -38,7 +38,7 @@
             DataTable dtstaff = Recipe.GetStaff();
             DataTable dtcuisine = Recipe.GetCuisines();
             WindowsFormsUtility.SetControlBinding(txtRecipeName, bindsource);
-            WindowsFormsUtility.SetListBinding(lstUsername, dtstaff, dtrecipe, "Staff");
+            WindowsFormsUtility.SetListBinding(lstUser, dtstaff, dtrecipe, "Staff");
             WindowsFormsUtility.SetListBinding(lstCuisineName, dtcuisine, dtrecipe, "Cuisine");
             WindowsFormsUtility.SetControlBinding(txtCalories, bindsource);
             WindowsFormsUtility.SetControlBinding(lblDateDrafted, bindsource);
@@ -48,6 +48,7 @@
             this.Text = GetRecipeDesc();
 
             SetButtonsEnabledBasedOnNewRecord();
+            formloaded = true;
         }
 
         private void LoadRecipeIngredient()
@@ -220,15 +221,14 @@
             LoadRecipeInstructions();
         }
 
-        //private void FrmRecipe_Activated(object? sender, EventArgs e)
-        //{
-        //    dtrecipe = Recipe.LoadRecipe(recipeid);
-        //    bindsource.DataSource = dtrecipe;
-        //    if (recipeid == 0)
-        //    {
-        //        dtrecipe.Rows.Add();
-        //    }
-        //}
+        private void FrmRecipe_Activated(object? sender, EventArgs e)
+        {
+            if (recipeid != 0 && formloaded == true) 
+            {
+                dtrecipe = Recipe.LoadRecipe(recipeid);
+                bindsource.DataSource = dtrecipe;
+            }
+        }
 
         private void BtnSave_Click(object? sender, EventArgs e)
         {

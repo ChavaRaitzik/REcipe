@@ -1,4 +1,6 @@
-﻿namespace RecipeWinForms
+﻿using System.Xml.Linq;
+
+namespace RecipeWinForms
 {
     public partial class frmDataMaintenance : Form
     {
@@ -22,6 +24,10 @@
             dtlist = DataMaintenance.GetDataList(currenttabletype.ToString());
             gData.Columns.Clear();
             gData.DataSource = dtlist;
+            if (tabletype  == TableTypeEnum.Staff)
+            {
+                gData.Columns["User"].Visible = false;
+            }
             WindowsFormsUtility.AddDeleteButtonToGrid(gData, deletecolname);
             WindowsFormsUtility.FormatGridforEdit(gData, currenttabletype.ToString());
         }

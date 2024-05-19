@@ -32,7 +32,7 @@
             }
             DataTable dtstaff = Recipe.GetStaff();
             WindowsFormsUtility.SetControlBinding(txtCookbookName, bindsource);
-            WindowsFormsUtility.SetListBinding(lstUsername, dtstaff, dtcookbook, "Staff");
+            WindowsFormsUtility.SetListBinding(lstUser, dtstaff, dtcookbook, "Staff");
             WindowsFormsUtility.SetControlBinding(txtPrice, bindsource);
             WindowsFormsUtility.SetControlBinding(lblDateCreated, bindsource);
             ckCookbookActive.DataBindings.Add("Checked", bindsource, "CookbookActive");

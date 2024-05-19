@@ -8,15 +8,15 @@ begin
 	declare @NewCookbookId int = 0
 	;
 	with x as(
-    select r.StaffId, s.FirstName, s.LastName, Price = count(r.RecipeId) * 1.33
+    select r.StaffId, s."User", Price = count(r.RecipeId) * 1.33
     from recipe r 
     join Staff s 
     on r.StaffId = s.StaffId  
     where r.StaffId = @staffid
-    group by r.StaffId, s.FirstName, s.LastName
+    group by r.StaffId, s."User"
 	)
 	Insert Cookbook(StaffId, CookbookName, Price, CookbookActive, DateCreated)
-	select x.StaffId, concat('Recipes by ', x.FirstName, ' ', x.LastName), x.Price, 1, getdate()
+	select x.StaffId, concat('Recipes by ', x."User"), x.Price, 1, getdate()
 	from x
 
 	select @NewCookbookId = SCOPE_IDENTITY()

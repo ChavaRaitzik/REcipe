@@ -13,9 +13,9 @@
         private void BindData()
         {
             dtstaff = CookbookAutoCreate.GetStaff();
-            lstUserName.DataSource = dtstaff;
-            lstUserName.ValueMember = "StaffId";
-            lstUserName.DisplayMember = "UserName";
+            lstUser.DataSource = dtstaff;
+            lstUser.ValueMember = "StaffId";
+            lstUser.DisplayMember = "User";
         }
 
         private void AutoCreateCookbook()
@@ -25,7 +25,7 @@
             Application.UseWaitCursor = true;
             try
             {
-                staffid = WindowsFormsUtility.GetIdFromComboBox(lstUserName);
+                staffid = WindowsFormsUtility.GetIdFromComboBox(lstUser);
                 newcookbookid = CookbookAutoCreate.AutoCreateCookbook(staffid);
                 ShowForm(typeof(frmCookbook), newcookbookid);
                 this.Close();

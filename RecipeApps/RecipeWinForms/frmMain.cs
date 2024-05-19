@@ -5,6 +5,7 @@
         public frmMain()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
             mnuDashboard.Click += MnuDashboard_Click;
             mnuRecipesList.Click += MnuRecipesList_Click;
             mnuRecipesNew.Click += MnuRecipesNew_Click;

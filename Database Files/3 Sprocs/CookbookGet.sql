@@ -7,7 +7,7 @@ as
 begin
 	declare @return int = 0;
 	select @cookbookid = isnull(@cookbookid,0), @all = isnull(@all,0)
-	select b.CookbookId, b.StaffId, b.CookbookName, s.UserName, b.Price, b.DateCreated, b.CookbookActive
+	select b.CookbookId, b.StaffId, b.CookbookName, s."User", b.Price, b.DateCreated, b.CookbookActive
 	from Cookbook b 
 	join Staff s 
 	on b.StaffId = s.StaffId
@@ -18,4 +18,4 @@ begin
 end
 go
 
-exec CookbookGet
+exec CookbookGet @all = 1

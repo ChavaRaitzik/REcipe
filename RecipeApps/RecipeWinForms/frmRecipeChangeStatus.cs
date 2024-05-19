@@ -14,6 +14,7 @@ namespace RecipeWinForms
             btnDraft.Click += BtnDraft_Click;
             btnPublish.Click += BtnPublish_Click;
             btnArchive.Click += BtnArchive_Click;
+            this.FormClosed += FrmRecipeChangeStatus_FormClosed;
         }
 
         public void LoadForm(int recipeidval)
@@ -76,6 +77,19 @@ namespace RecipeWinForms
             {
                 Application.UseWaitCursor = false;
             }
+        }
+
+        private void ShowForm(Type frmtype, int id = 0)
+        {
+            if (this.MdiParent != null && this.MdiParent is frmMain)
+            {
+                ((frmMain)this.MdiParent).OpenForm(frmtype, id);
+            }
+        }
+
+        private void FrmRecipeChangeStatus_FormClosed(object? sender, FormClosedEventArgs e)
+        {
+            ShowForm(typeof(frmRecipe), recipeid);
         }
 
         private void BtnDraft_Click(object? sender, EventArgs e)
