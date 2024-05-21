@@ -8,6 +8,9 @@ begin
 	select @StaffId = isnull(@StaffId,0)
 	begin try
 		begin tran
+--LB: Formatting tip: code inside transaction should be indented.
+--LB: All delete statements can be done without joining the staff table. Please modify all of them.
+
 		delete i
 		from Staff s 
 		join Recipe r 
@@ -41,7 +44,7 @@ begin
 		join MealCourseRecipe mcr 
 		on mc.MealCourseId = mcr.MealCourseId
 		where s.StaffId = @StaffId
-		
+
 		delete mc
 		from Staff s 
 		join Meal m 
@@ -49,7 +52,7 @@ begin
 		join MealCourse mc 
 		on m.MealId = mc.MealId 
 		where s.StaffId = @StaffId
-		
+
 		delete br
 		from Staff s 
 		join Recipe r 

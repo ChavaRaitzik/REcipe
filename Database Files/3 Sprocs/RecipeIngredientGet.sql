@@ -16,6 +16,7 @@ begin
 	or ri.RecipeId = @RecipeId
 	or @all = 1;
 
+--LB: It would be nice to order by IngredientNum so that it shows up in the right order in the front end.
 	return @return
 end
 go
