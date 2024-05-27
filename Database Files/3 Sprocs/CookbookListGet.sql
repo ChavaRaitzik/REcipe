@@ -9,6 +9,7 @@ begin
 	select @CookbookId = isnull(@cookbookid,0), @all = isnull(@all,0)
 	select b.CookbookId, b.CookbookName, Author = s."User", NumRecipes = count(br.CookbookRecipeId), b.Price
 	from Cookbook b 
+--LB: No need to left join staff.
 	left join Staff s 
 	on b.StaffId = s.StaffId
 	left join CookbookRecipe br 

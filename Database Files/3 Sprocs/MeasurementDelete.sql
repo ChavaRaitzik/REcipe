@@ -9,6 +9,8 @@ begin
 
 	begin try
 	begin tran
+--LB: It should be enough to delete the RecipeIngredient records in order to be able to delete Measurement record. Please remove all unnecessary statements. 
+
 		delete br
 		from Measurement m
 		join RecipeIngredient ri

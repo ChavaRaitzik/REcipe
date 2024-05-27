@@ -14,6 +14,7 @@ begin
 	end
 	begin try
 		begin tran
+--LB: Formatting tip: Code inside transaction should be indented.
 		Delete CookbookRecipe where RecipeId = @recipeid
 		Delete MealCourseRecipe where RecipeId = @recipeid
 		Delete RecipeIngredient where RecipeId = @recipeId
@@ -26,6 +27,7 @@ begin
 		throw
 	end catch
 
+--LB: Formatting tip: Code below shouldn't be indented.
 		finished:
 		return @return
 

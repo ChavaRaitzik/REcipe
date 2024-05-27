@@ -16,7 +16,7 @@ begin
 		where c.CourseId = @CourseId
 
 		delete MealCourse where CourseId = @CourseId
-
+--LB: Unnecessary to delete meal in order to delete course.
 		delete m
 		from Course c 
 		join MealCourse mc
@@ -35,3 +35,5 @@ begin
 		
 	return @return
 end
+
+select * from meal
