@@ -27,7 +27,6 @@ grant execute on RecipeIngredientDelete to approle
 grant execute on RecipeInstructionsDelete to approle
 grant execute on RecipeChangeStatus to approle
 grant execute on RecipeListGet to approle
-grant execute on MealGet to approle
 grant execute on MealListGet to approle
 grant execute on CourseGet to approle
 grant execute on RecipeIngredientUpdate to approle

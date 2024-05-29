@@ -93,6 +93,14 @@
 
         private void FrmMain_Shown(object? sender, EventArgs e)
         {
+            frmLogin f = new();
+            bool b = f.ShowLogin();
+            if (b == false)
+            {
+                this.Close();
+                Application.Exit();
+                return;
+            }
             OpenForm(typeof(frmDashboard));
         }
 
