@@ -7,10 +7,11 @@ begin
 	declare @return int = 0
 
 	select @cookbookid = isnull(@cookbookid, 0)
+
 	begin try
 		begin tran
-		Delete CookbookRecipe where CookbookId = @cookbookid
-		Delete Cookbook where CookbookId = @cookbookid
+			Delete CookbookRecipe where CookbookId = @cookbookid
+			Delete Cookbook where CookbookId = @cookbookid
 		commit
 	end try
 	begin catch
@@ -18,8 +19,6 @@ begin
 		throw
 	end catch
 
-		finished:
-		return @return
-
+	return @return
 end
 go

@@ -9,6 +9,8 @@ create or alter proc dbo.RecipeIngredientUpdate(
 )
 as
 begin
+	declare @return int = 0
+
 	select @RecipeIngredientId = isnull(@RecipeIngredientId,0), @RecipeId = isnull(@RecipeId,0), @IngredientId = isnull(@IngredientId,0), @MeasurementId = isnull(@MeasurementId,0), @Quantity = isnull(@Quantity,0), @IngredientNum = isnull(@IngredientNum,0)
 
 	If @RecipeIngredientId = 0
@@ -28,5 +30,7 @@ begin
 			IngredientNum = @IngredientNum
 		where RecipeIngredientId = @RecipeIngredientId
 	end
+
+	return @return
 end
 go

@@ -8,16 +8,32 @@ create or alter procedure dbo.RecipeGet(
 as 
 begin
 	declare @return int = 0
-	select @recipeid = isnull(@recipeid,0), @all = isnull(@all,0)
-	select r.RecipeId, r.StaffId, r.CuisineId, r.RecipeName, r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePic,
-		RecipeInfo = dbo.RecipeInfo(r.RecipeId)
-	from Recipe r
-	where @recipeid = r.RecipeId
-	or @all = 1
-	or (@recipename <> '' and r.RecipeName like '%' + @recipename + '%')
-	union select 0, 0, 0, ' ', 0, ' ', ' ', ' ', ' ', ' ', ' '
-	where @includeblank = 1
-	order by r.RecipeName
+
+	select @All = isnull(@All, 0), @RecipeId = isnull(@RecipeId, 0)
+
+	if @all = 1
+	begin
+		Select r.RecipeId, r.RecipeName, 'Status' = r.RecipeStatus, 'User' = s."User", r.Calories, NumIngredients = count(distinct ri.IngredientId)
+		from Recipe r 
+		join Staff s 
+		on r.StaffId = s.StaffId
+		left join RecipeIngredient ri 
+		on r.RecipeId = ri.RecipeId
+		where @all = 1
+		group by r.RecipeId, r.RecipeName, r.RecipeStatus, s."User", r.Calories
+		order by r.RecipeStatus desc, r.RecipeName 
+	end
+	else
+	begin
+		select r.RecipeId, r.StaffId, r.CuisineId, r.RecipeName, r.Calories, DateDrafted = convert(Date, r.DateDrafted), DatePublished = convert(Date, r.DatePublished), DateArchived = convert(date,r.DateArchived), r.RecipeStatus
+		from Recipe r
+		where @recipeid = r.RecipeId
+		or (@recipename <> '' and r.RecipeName like '%' + @recipename + '%')
+		union select 0, 0, 0, ' ', 0, ' ', ' ', ' ', ' '
+		where @includeblank = 1
+		order by r.RecipeName
+	end
+
 	return @return
 end
 

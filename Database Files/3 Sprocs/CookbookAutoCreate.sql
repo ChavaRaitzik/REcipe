@@ -6,6 +6,7 @@ create or alter proc dbo.CookbookAutoCreate(
 as
 begin
 	declare @NewCookbookId int = 0
+
 	;
 	with x as(
     select r.StaffId, s."User", Price = count(r.RecipeId) * 1.33

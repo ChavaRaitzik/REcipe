@@ -8,6 +8,7 @@ create or alter proc dbo.StaffUpdate(
 as
 begin 
 	declare @return int = 0
+
 	select @StaffId = isnull(@StaffId,0)
 
 	if @StaffId = 0
@@ -25,5 +26,6 @@ begin
 			LastName = @LastName
 		where StaffId = @StaffId
 	end
+
 	return @return
 end

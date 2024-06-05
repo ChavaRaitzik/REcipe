@@ -7,6 +7,8 @@ create or alter proc dbo.RecipeInstructionsUpdate(
 )
 as
 begin
+	declare @return int = 0
+
 	select @InstructionsId = isnull(@InstructionsId,0), @RecipeId = isnull(@RecipeId,0), @StepNum = isnull(@StepNum,0)
 
 	If @InstructionsId = 0
@@ -24,5 +26,7 @@ begin
 			Instructions = @Instructions
 		where InstructionsId = @InstructionsId
 	end
+
+	return @return
 end
 go

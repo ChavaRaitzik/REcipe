@@ -5,7 +5,7 @@
 
         public static DataTable GetRecipeList()
         {
-            SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeListGet");
+            SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
             SQLUtility.SetParamValue(cmd, "@all", 1);
             return SQLUtility.GetDataTable(cmd);
         }
