@@ -1,4 +1,4 @@
-﻿namespace RecipeSystems
+﻿ namespace RecipeSystems
 {
     public class DBManager
     {

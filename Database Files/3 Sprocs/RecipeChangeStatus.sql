@@ -9,6 +9,7 @@ create or alter proc dbo.RecipeChangeStatus(
 as
 begin
 	declare @return int = 0
+
 	select @RecipeId = isnull(@RecipeId, 0), @DateDrafted = DateDrafted, @DatePublished = DatePublished, @DateArchived = DateArchived from Recipe where RecipeId = @RecipeId
 
 	if @NewStatus = 'Drafted'
@@ -41,7 +42,6 @@ begin
 			DateArchived = @DateArchived
 		where RecipeId = @RecipeId
 	end
-
 
 	return @return
 end

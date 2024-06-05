@@ -5,45 +5,15 @@ create or alter proc dbo.IngredientDelete(
 as
 begin
 	declare @return int = 0
+
 	select @IngredientId = ISNULL(@IngredientId, 0)
+
 --LB: No need to delete recipe, instructions etc. in order to delete ingredient. Please remove all unnecessary statements. 
 	begin try
-	begin tran
-		delete br 
-		from Ingredient i
-		join RecipeIngredient ri 
-		on i.IngredientId = ri.IngredientId
-		join CookbookRecipe br 
-		on ri.RecipeId = br.RecipeId
-		where i.IngredientId = @IngredientId
+		begin tran
+			delete RecipeIngredient where IngredientId = @IngredientId
 
-		delete mcr 
-		from Ingredient i
-		join RecipeIngredient ri 
-		on i.IngredientId = ri.IngredientId
-		join MealCourseRecipe mcr
-		on ri.RecipeId = mcr.RecipeId
-		where i.IngredientId = @IngredientId
-
-		delete n 
-		from Ingredient i
-		join RecipeIngredient ri 
-		on i.IngredientId = ri.IngredientId
-		join Instructions n 
-		on ri.RecipeId = n.RecipeId
-		where i.IngredientId = @IngredientId
-
-		delete RecipeIngredient where IngredientId = @IngredientId
-
-		delete r
-		from Ingredient i 
-		join RecipeIngredient ri
-		on i.IngredientId = ri.IngredientId
-		join Recipe r 
-		on ri.RecipeId = r.RecipeId
-		where i.IngredientId = @IngredientId
-
-		delete Ingredient where IngredientId = @IngredientId
+			delete Ingredient where IngredientId = @IngredientId
 		commit
 	end try
 	begin catch

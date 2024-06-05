@@ -14,7 +14,8 @@ begin
 	from RecipeIngredient ri
 	where ri.RecipeIngredientId = @RecipeIngredientId
 	or ri.RecipeId = @RecipeId
-	or @all = 1;
+	or @all = 1
+	order by ri.IngredientNum
 
 --LB: It would be nice to order by IngredientNum so that it shows up in the right order in the front end.
 	return @return

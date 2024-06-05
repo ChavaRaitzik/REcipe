@@ -6,7 +6,9 @@ create or alter procedure dbo.CookbookGet(
 as 
 begin
 	declare @return int = 0;
+
 	select @cookbookid = isnull(@cookbookid,0), @all = isnull(@all,0)
+
 	select b.CookbookId, b.StaffId, b.CookbookName, s."User", b.Price, b.DateCreated, b.CookbookActive
 	from Cookbook b 
 	join Staff s 
@@ -14,8 +16,9 @@ begin
 	where @cookbookid = b.CookbookId
 	or @all = 1
 	order by b.CookbookName
+
 	return @return
 end
 go
 
-exec CookbookGet @all = 1
+--exec CookbookGet @all = 1

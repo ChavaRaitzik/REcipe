@@ -15,6 +15,7 @@
             btnDelete.Click += BtnDelete_Click;
             btnSaveRecipe.Click += BtnSaveRecipe_Click;
             gRecipe.CellContentClick += GRecipe_CellContentClick;
+            gRecipe.DataError += GRecipe_DataError;
             this.Shown += FrmCookbook_Shown;
             this.FormClosing += FrmCookbook_FormClosing;
         }
@@ -32,7 +33,7 @@
             }
             DataTable dtstaff = Recipe.GetStaff();
             WindowsFormsUtility.SetControlBinding(txtCookbookName, bindsource);
-            WindowsFormsUtility.SetListBinding(lstUser, dtstaff, dtcookbook, "Staff");
+            WindowsFormsUtility.SetListBinding(lstUser, dtstaff, dtcookbook, "Staff", bindsource);
             WindowsFormsUtility.SetControlBinding(txtPrice, bindsource);
             WindowsFormsUtility.SetControlBinding(lblDateCreated, bindsource);
             ckCookbookActive.DataBindings.Add("Checked", bindsource, "CookbookActive");
@@ -176,6 +177,11 @@
             {
                 DeleteCookbookRecipe(e.RowIndex);
             }
+        }
+
+        private void GRecipe_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Error: Only numeric values can be inserted into numeric columns.");
         }
 
         private void FrmCookbook_FormClosing(object? sender, FormClosingEventArgs e)
