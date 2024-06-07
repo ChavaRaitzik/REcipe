@@ -2,16 +2,15 @@ namespace RecipeTest
 {
     public class RecipeTest
     {
-        //string connstring = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
-        string connstring = ConfigurationManager.ConnectionStrings["liveconn"].ConnectionString;
-        //string testconnstring = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
-        string testconnstring = ConfigurationManager.ConnectionStrings["liveconn"].ConnectionString;
+        string connstring = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
+        string testconnstring = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
+        string liveconnstring = ConfigurationManager.ConnectionStrings["liveconn"].ConnectionString;
 
 
         [SetUp]
         public void Setup()
         {
-            DBManager.SetConnectionString(connstring, true);
+            DBManager.SetConnectionString(liveconnstring, true);
         }
 
         private DataTable GetDataTable(string sql)
