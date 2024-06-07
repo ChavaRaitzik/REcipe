@@ -22,4 +22,4 @@ begin
 end
 go
 
-exec InstructionsGet @all = 1
+--exec InstructionsGet @all = 1

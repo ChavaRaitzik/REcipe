@@ -7,6 +7,7 @@ begin
 	declare @return int = 0
 
 	select @recipeid = isnull(@recipeid, 0)
+
 	if exists(select * from Recipe r where r.RecipeId = @recipeid and ((r.RecipeStatus = 'published') or (r.RecipeStatus = 'archived' and DateDiff(day, r.DateArchived, GETDATE()) < 30)))
 	begin
 		select @return = 1, @message = 'Can only delete recipe that either has a status of drafted or archived for over 30 days.'
@@ -14,11 +15,12 @@ begin
 	end
 	begin try
 		begin tran
-		Delete CookbookRecipe where RecipeId = @recipeid
-		Delete MealCourseRecipe where RecipeId = @recipeid
-		Delete RecipeIngredient where RecipeId = @recipeId
-		Delete Instructions where RecipeId = @recipeid
-		Delete Recipe where RecipeId = @recipeid
+--LB: Formatting tip: Code inside transaction should be indented.
+			Delete CookbookRecipe where RecipeId = @recipeid
+			Delete MealCourseRecipe where RecipeId = @recipeid
+			Delete RecipeIngredient where RecipeId = @recipeId
+			Delete Instructions where RecipeId = @recipeid
+			Delete Recipe where RecipeId = @recipeid
 		commit
 	end try
 	begin catch
@@ -26,8 +28,9 @@ begin
 		throw
 	end catch
 
-		finished:
-		return @return
+--LB: Formatting tip: Code below shouldn't be indented.
+	finished:
+	return @return
 
 end
 go

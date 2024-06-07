@@ -7,6 +7,7 @@ create or alter proc dbo.CourseUpdate(
 as
 begin
 	declare @return int = 0
+
 	select @CourseId = isnull(@CourseId, 0), @CourseNum = isnull(@CourseNum, 0)
 
 	if @CourseId = 0
@@ -23,5 +24,6 @@ begin
 			CourseNum = @CourseNum
 		where CourseId = @CourseId
 	end
+
 	return @return
 end

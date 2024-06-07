@@ -16,18 +16,16 @@ begin
 	select @NewRecipeId = SCOPE_IDENTITY();
 
 	Insert RecipeIngredient(RecipeId, IngredientId, MeasurementId, IngredientNum, Quantity)
-	select (select r.RecipeId from Recipe r where r.RecipeId = @NewRecipeId), ri.IngredientId, ri.MeasurementId, ri.IngredientNum, ri.Quantity
+--LB: You can use @NewRecipeId without selecting from the table. (the value is the same). Same for statement below.
+	select @NewRecipeId, ri.IngredientId, ri.MeasurementId, ri.IngredientNum, ri.Quantity
 	from RecipeIngredient ri  
-	join Recipe r 
-	on ri.RecipeId = r.RecipeId
-	where r.RecipeId = @RecipeId
+--LB: No need to join recipe table. The where clause can be based on RecipeId in RecipeIngredient table. Same for statement below.
+	where ri.RecipeId = @RecipeId
 	
 	Insert Instructions(RecipeId, StepNum, Instructions)
-	select (select r.RecipeId from Recipe r where r.RecipeId = @NewRecipeId), i.StepNum, i.Instructions 
+	select @NewRecipeId, i.StepNum, i.Instructions 
 	from Instructions i  
-	join Recipe r 
-	on i.RecipeId = r.RecipeId
-	where r.RecipeId = @RecipeId
+	where i.RecipeId = @RecipeId
 
 	return @NewRecipeId
 end

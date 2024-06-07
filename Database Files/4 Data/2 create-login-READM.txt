@@ -1,0 +1,15 @@
+script to create login and user is excluded from this repo
+create a file called create-login.sql (this file is ignored by git ignore in this repo)
+Add the following to that file
+
+--IMPORTANT create login in MASTER
+use master
+go 
+Create login [login] with PASSWORD = '[password]'
+go
+
+--IMPORTAT switch to HeartyHearthDB for User
+use HeartyHearthDB
+go
+create user [username] from login [loginname] 
+go

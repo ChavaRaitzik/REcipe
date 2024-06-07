@@ -8,7 +8,9 @@ create or alter procedure dbo.StaffGet(
 as
 begin
 	declare @return int = 0
+
 	select @staffid = isnull(@staffid,0), @all = isnull(@all,0)
+
 	select s.StaffId, s.UserName, s.FirstName, s.LastName, s."User"
 	from Staff s
 	where s.StaffId = @staffid
@@ -17,6 +19,7 @@ begin
 	union select 0, '', '', '', ''
 	where @includeblank = 1
 	order by s."User"
+
 	return @return
 end
 

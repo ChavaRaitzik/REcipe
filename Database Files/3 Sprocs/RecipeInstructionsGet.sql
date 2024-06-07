@@ -9,6 +9,7 @@ begin
 	declare @return int = 0
 
 	select @All = isnull(@All, 0), @InstructionsId = isnull(@InstructionsId, 0)
+
 	select n.InstructionsId, n.RecipeId, n.Instructions, n.StepNum 
 	from Instructions n
 	where n.Instructionsid = @InstructionsId

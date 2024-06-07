@@ -4,6 +4,7 @@ create or alter proc dbo.DashboardSummaryGet(
 as
 begin
 	declare @return int = 0
+
 	select Type = 'Recipes', Number = count(r.RecipeId)
 	from Recipe r 
 	union select 'Meals', count(m.MealId)
@@ -11,8 +12,9 @@ begin
 	union select 'Cookbooks', count(c.CookbookId)
 	from Cookbook c 
 	order by Type desc
+
 	return @return
 end
 go
 
-exec DashboardSummaryGet
+--exec DashboardSummaryGet

@@ -6,6 +6,7 @@ create or alter proc dbo.IngredientUpdate(
 as
 begin 
 	declare @return int = 0
+
 	select @IngredientId = ISNULL(@IngredientId, 0)
 
 	if @IngredientId = 0
@@ -21,5 +22,6 @@ begin
 			IngredientName = @IngredientName
 		where IngredientId = @IngredientId
 	end
+
 	return @return
 end

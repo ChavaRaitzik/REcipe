@@ -6,6 +6,8 @@
         DataTable dtrecipe = new();
         DataTable dtrecipeingredient = new();
         DataTable dtinstructions = new();
+        DataTable dtstaff = new();
+        DataTable dtcuisine = new();
         BindingSource bindsource = new();
         string deletecolname = "deletecol";
         int recipeid = 0;
@@ -20,6 +22,8 @@
             btnSaveSteps.Click += BtnSaveSteps_Click;
             gIngredients.CellContentClick += GIngredients_CellContentClick;
             gSteps.CellContentClick += GSteps_CellContentClick;
+            gIngredients.DataError += GIngredients_DataError;
+            gSteps.DataError += GSteps_DataError;
             this.Activated += FrmRecipe_Activated;
             this.Shown += FrmRecipe_Shown;
             this.FormClosing += FrmRecipe_FormClosing;
@@ -35,11 +39,11 @@
             {
                 dtrecipe.Rows.Add();
             }
-            DataTable dtstaff = Recipe.GetStaff();
-            DataTable dtcuisine = Recipe.GetCuisines();
+            dtstaff = Recipe.GetStaff();
+            dtcuisine = Recipe.GetCuisines();
             WindowsFormsUtility.SetControlBinding(txtRecipeName, bindsource);
-            WindowsFormsUtility.SetListBinding(lstUser, dtstaff, dtrecipe, "Staff");
-            WindowsFormsUtility.SetListBinding(lstCuisineName, dtcuisine, dtrecipe, "Cuisine");
+            WindowsFormsUtility.SetListBinding(lstUser, dtstaff, dtrecipe, "Staff", bindsource);
+            WindowsFormsUtility.SetListBinding(lstCuisineName, dtcuisine, dtrecipe, "Cuisine",bindsource);
             WindowsFormsUtility.SetControlBinding(txtCalories, bindsource);
             WindowsFormsUtility.SetControlBinding(lblDateDrafted, bindsource);
             WindowsFormsUtility.SetControlBinding(lblDatePublished, bindsource);
@@ -48,7 +52,6 @@
             this.Text = GetRecipeDesc();
 
             SetButtonsEnabledBasedOnNewRecord();
-            formloaded = true;
         }
 
         private void LoadRecipeIngredient()
@@ -203,6 +206,7 @@
             btnDelete.Enabled = b;
             btnSaveIngredients.Enabled = b;
             btnSaveSteps.Enabled = b;
+            btnChangeStatus.Enabled = b;
         }
 
 
@@ -223,11 +227,12 @@
 
         private void FrmRecipe_Activated(object? sender, EventArgs e)
         {
-            if (recipeid != 0 && formloaded == true) 
+            if (recipeid != 0 && formloaded == true)
             {
                 dtrecipe = Recipe.LoadRecipe(recipeid);
                 bindsource.DataSource = dtrecipe;
             }
+            formloaded = true;
         }
 
         private void BtnSave_Click(object? sender, EventArgs e)
@@ -256,7 +261,7 @@
 
         private void GSteps_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (gSteps.Columns[e.ColumnIndex].HeaderText == "Delete")
+            if (gSteps.Columns[e.ColumnIndex].HeaderText == "Delete" && gSteps.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
             {
                 DeleteRecipeInstructions(e.RowIndex);
             }
@@ -264,10 +269,20 @@
 
         private void GIngredients_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (gIngredients.Columns[e.ColumnIndex].HeaderText == "Delete")
+            if (gIngredients.Columns[e.ColumnIndex].HeaderText == "Delete" && gIngredients.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
             {
                 DeleteRecipeIngredients(e.RowIndex);
             }
+        }
+
+        private void GIngredients_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Error: Only numeric values can be inserted into numeric columns.");
+        }
+
+        private void GSteps_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Error: Only numeric values can be inserted into numeric columns.");
         }
 
         private void FrmRecipe_FormClosing(object? sender, FormClosingEventArgs e)

@@ -6,6 +6,7 @@ create or alter proc dbo.MeasurementUpdate(
 as
 begin 
 	declare @return int = 0
+
 	select @MeasurementId = ISNULL(@MeasurementId, 0)
 
 	if @MeasurementId = 0
@@ -21,5 +22,6 @@ begin
 			MeasurementName = @MeasurementName
 		where MeasurementId = @MeasurementId
 	end
+
 	return @return
 end

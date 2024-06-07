@@ -6,6 +6,7 @@ create or alter proc dbo.CuisineUpdate(
 as
 begin 
 	declare @return int = 0
+
 	select @CuisineId = isnull(@CuisineId,0)
 
 	if @CuisineId = 0
@@ -21,5 +22,6 @@ begin
 			CuisineName = @CuisineName
 		where CuisineId = @CuisineId
 	end
+
 	return @return
 end

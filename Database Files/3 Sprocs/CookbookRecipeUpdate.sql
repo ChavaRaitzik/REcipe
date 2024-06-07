@@ -7,6 +7,8 @@ create or alter proc dbo.CookbookRecipeUpdate(
 )
 as
 begin
+	declare @return int = 0
+
 	select @CookbookRecipeId = isnull(@CookbookRecipeId,0), @CookbookId = isnull(@CookbookId,0), @RecipeId = isnull(@RecipeId,0), @RecipeNum = isnull(@RecipeNum,0)
 
 	If @CookbookRecipeId = 0
@@ -24,5 +26,7 @@ begin
 			RecipeNum = @RecipeNum
 		where CookbookRecipeId = @CookbookRecipeId
 	end
+
+	return @return
 end
 go
