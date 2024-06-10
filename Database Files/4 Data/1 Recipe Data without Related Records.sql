@@ -1,4 +1,4 @@
-use HeartyHearthDB_craitzik
+use HeartyHearthDB
 go
 
 ;

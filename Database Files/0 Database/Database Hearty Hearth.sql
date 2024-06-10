@@ -1,8 +1,8 @@
 use master 
 go 
-drop database if exists HeartyHearthDB_craitzik
+drop database if exists HeartyHearthDB
 go 
-create database HeartyHearthDB_craitzik
+create database HeartyHearthDB
 go 
-use HeartyHearthDB_craitzik
+use HeartyHearthDB
 go 
