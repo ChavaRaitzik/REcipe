@@ -10,7 +10,6 @@ begin
 
 	begin try
 		begin tran
---LB: No need to include cuisine table in most of the statements. Please try to simplify the delete statements.
 			delete br 
 			from Recipe r
 			join CookbookRecipe br

@@ -10,8 +10,6 @@ begin
 	select @mealid = isnull(@mealid, 0), @all = isnull(@all,0)
 
 	Select m.MealId, m.MealName, 'User' = s."User", NumCalories = sum(r.Calories), NumCourses = count(distinct mc.CourseId), NumRecipes = count(distinct mcr.RecipeId)
---LB: It would be better to select from meal and join the other tables. (I don't think it's necessary to join recipe table)
---CR: I joined the recipe table for the number of calories
 	from Meal m 
 	left join MealCourse mc
 	on m.MealId = mc.MealId

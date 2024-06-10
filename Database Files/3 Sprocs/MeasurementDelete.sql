@@ -10,7 +10,6 @@ begin
 
 	begin try
 		begin tran
---LB: It should be enough to delete the RecipeIngredient records in order to be able to delete Measurement record. Please remove all unnecessary statements. 
 			delete RecipeIngredient where MeasurementId = @MeasurementId
 
 			delete Measurement where MeasurementId = @MeasurementId

@@ -1,5 +1,5 @@
 -- SM Excellent! 100%
-use HeartyHearthDB
+use HeartyHearthDB_craitzik
 go 
 
 

@@ -10,8 +10,6 @@ begin
 
 	begin try
 		begin tran
---LB: Formatting tip: code inside transaction should be indented.
---LB: All delete statements can be done without joining the staff table. Please modify all of them.
 			delete i
 			from  Recipe r 
 			join Instructions i

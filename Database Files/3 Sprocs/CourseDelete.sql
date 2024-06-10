@@ -17,7 +17,6 @@ begin
 			where c.CourseId = @CourseId
 
 			delete MealCourse where CourseId = @CourseId
---LB: Unnecessary to delete meal in order to delete course.
 
 			delete Course where CourseId = @CourseId
 		commit
