@@ -18,7 +18,7 @@ namespace RecipeTest
             DataTable dt = new DataTable();
             DBManager.SetConnectionString(liveconnstring, false);
             dt = SQLUtility.GetDataTable(sql);
-            DBManager.SetConnectionString(connstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             return dt;
         }
 
@@ -27,7 +27,7 @@ namespace RecipeTest
             int n = 0;
             DBManager.SetConnectionString(liveconnstring, false);
             n = SQLUtility.GetFirstColumnFirstRowValue(sql);
-            DBManager.SetConnectionString(connstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             return n;
         }
 
@@ -36,7 +36,7 @@ namespace RecipeTest
             string s = "";
             DBManager.SetConnectionString(liveconnstring, false);
             s = SQLUtility.GetFirstColumnFirstRowString(sql);
-            DBManager.SetConnectionString(connstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             return s;
         }
         [Test]
