@@ -261,7 +261,7 @@
 
         private void GSteps_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (gSteps.Columns[e.ColumnIndex].HeaderText == "Delete")
+            if (gSteps.Columns[e.ColumnIndex].HeaderText == "Delete" && gSteps.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
             {
                 DeleteRecipeInstructions(e.RowIndex);
             }
@@ -269,7 +269,7 @@
 
         private void GIngredients_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (gIngredients.Columns[e.ColumnIndex].HeaderText == "Delete")
+            if (gIngredients.Columns[e.ColumnIndex].HeaderText == "Delete" && gIngredients.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
             {
                 DeleteRecipeIngredients(e.RowIndex);
             }

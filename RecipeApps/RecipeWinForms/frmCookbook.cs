@@ -173,7 +173,7 @@
 
         private void GRecipe_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (gRecipe.Columns[e.ColumnIndex].HeaderText == "Delete")
+            if (gRecipe.Columns[e.ColumnIndex].HeaderText == "Delete" && gRecipe.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
             {
                 DeleteCookbookRecipe(e.RowIndex);
             }

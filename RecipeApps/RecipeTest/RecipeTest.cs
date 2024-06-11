@@ -16,27 +16,27 @@ namespace RecipeTest
         private DataTable GetDataTable(string sql)
         {
             DataTable dt = new DataTable();
-            DBManager.SetConnectionString(testconnstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             dt = SQLUtility.GetDataTable(sql);
-            DBManager.SetConnectionString(connstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             return dt;
         }
 
         private int GetFirstColumnFirstRowValue(string sql)
         {
             int n = 0;
-            DBManager.SetConnectionString(testconnstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             n = SQLUtility.GetFirstColumnFirstRowValue(sql);
-            DBManager.SetConnectionString(connstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             return n;
         }
 
         private string GetFirstColumnFirstRowString(string sql)
         {
             string s = "";
-            DBManager.SetConnectionString(testconnstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             s = SQLUtility.GetFirstColumnFirstRowString(sql);
-            DBManager.SetConnectionString(connstring, false);
+            DBManager.SetConnectionString(liveconnstring, false);
             return s;
         }
         [Test]
