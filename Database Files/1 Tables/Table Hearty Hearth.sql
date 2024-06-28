@@ -78,7 +78,8 @@ Create table dbo.Recipe(
                         end  
                             else 'Archived'
                         end persisted, 
-    RecipePic as concat('Recipe','-',replace(RecipeName,' ','-'),'.jpg') persisted,  
+    --RecipePic as concat('Recipe','_',replace(RecipeName,' ','_'),'.jpg') persisted,  
+	RecipePic as concat('Recipe','_',replace(RecipeName,' ',''),'.jpg') persisted,  
     constraint ck_Recipe_DateDrafted_must_be_before_DateArchived check(DateDrafted < DateArchived),
     constraint ck_Recipe_DatePublished_must_be_between_DateDrafted_and_DateArchived check(DatePublished between DateDrafted and DateArchived)
 )

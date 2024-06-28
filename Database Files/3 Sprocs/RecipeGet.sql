@@ -13,14 +13,14 @@ begin
 
 	if @all = 1
 	begin
-		Select r.RecipeId, r.RecipeName, 'Status' = r.RecipeStatus, 'User' = s."User", r.Calories, NumIngredients = count(distinct ri.IngredientId)
+		Select r.RecipeId, r.RecipeName, 'Status' = r.RecipeStatus, 'User' = s."User", r.Calories, NumIngredients = count(distinct ri.IngredientId), r.RecipePic
 		from Recipe r 
 		join Staff s 
 		on r.StaffId = s.StaffId
 		left join RecipeIngredient ri 
 		on r.RecipeId = ri.RecipeId
 		where @all = 1
-		group by r.RecipeId, r.RecipeName, r.RecipeStatus, s."User", r.Calories
+		group by r.RecipeId, r.RecipeName, r.RecipeStatus, s."User", r.Calories, r.RecipePic
 		order by r.RecipeStatus desc, r.RecipeName 
 	end
 	else
