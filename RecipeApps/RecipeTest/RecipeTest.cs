@@ -1,11 +1,10 @@
-namespace RecipeTest
+﻿namespace RecipeTest
 {
     public class RecipeTest
     {
         string connstring = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
         string testconnstring = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
         string liveconnstring = ConfigurationManager.ConnectionStrings["liveconn"].ConnectionString;
-
 
         [SetUp]
         public void Setup()
@@ -59,11 +58,12 @@ namespace RecipeTest
             r["cuisineid"] = cuisineid;
             r["recipename"] = recipename;
             r["calories"] = calories;
-            Recipe.Save(dt);
+            bizRecipe rec = new();
+            rec.Save(dt);
 
             int newrecipeid = GetFirstColumnFirstRowValue("Select recipeid from Recipe where recipename = " + "'" + recipename + "'");
 
-            Assert.IsTrue(newrecipeid > 0, "Recipe with recipename = " + recipename + "staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", is not found in db");
+            ClassicAssert.IsTrue(newrecipeid > 0, "Recipe with recipename = " + recipename + "staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", is not found in db");
             TestContext.WriteLine("Recipe with staffid = " + staffid + ", cuisineid = " + cuisineid + ", recipename = " + recipename + ", calories = " + calories + ", is found in db with pk value = " + newrecipeid);
         }
 
@@ -92,13 +92,14 @@ namespace RecipeTest
             dt.Rows[0]["cuisineid"] = cuisineid;
             dt.Rows[0]["recipename"] = recipename;
             dt.Rows[0]["calories"] = calories;
-            Recipe.Save(dt);
+            bizRecipe rec = new();
+            rec.Save(dt);
             int changedstaffid = GetFirstColumnFirstRowValue("Select r.staffid from recipe r where r.recipeid = " + recipeid);
             int changedcuisineid = GetFirstColumnFirstRowValue("Select r.cuisineid from recipe r where r.recipeid = " + recipeid);
             string changedrecipename = GetFirstColumnFirstRowString("Select r.recipename from recipe r where r.recipeid = " + recipeid).ToString();
             int changedcalories = GetFirstColumnFirstRowValue("Select r.calories from recipe r where r.recipeid = " + recipeid);
 
-            Assert.IsTrue(changedstaffid == staffid && changedcuisineid == cuisineid && changedrecipename == recipename && changedcalories == calories, "", "Recipe with recipeid " + recipeid + ": staffid <> " + staffid + ", cuisineid <> " + cuisineid + ", recipename <> " + recipename + ", calories <> " + calories);
+            ClassicAssert.IsTrue(changedstaffid == staffid && changedcuisineid == cuisineid && changedrecipename == recipename && changedcalories == calories, "", "Recipe with recipeid " + recipeid + ": staffid <> " + staffid + ", cuisineid <> " + cuisineid + ", recipename <> " + recipename + ", calories <> " + calories);
             TestContext.WriteLine("Recipe with recipeid " + recipeid + ": recipename = " + changedrecipename + ", staffid = " + changedstaffid + ", cuisineid = " + changedcuisineid + ", calories = " + changedcalories);
         }
 
@@ -117,7 +118,8 @@ namespace RecipeTest
             string recipenamechanged = GetFirstColumnFirstRowString("Select r.recipename from recipe r where r.recipeid <> " + recipeid).ToString();
 
             TestContext.WriteLine("For recipe with recipeid " + recipeid + ": try to change to invalid data: recipename to a used recipe name (not unique), calories to 0, datedrafted to later than the current date");
-            DataTable dt = Recipe.LoadRecipe(recipeid);
+            bizRecipe rec = new();
+            DataTable dt = rec.Load(recipeid);
 
             dt.Rows[0]["recipename"] = recipenamechanged;
             Exception ex = Assert.Throws<Exception>(() => Recipe.Save(dt));
@@ -128,7 +130,7 @@ namespace RecipeTest
             TestContext.WriteLine(ex2.Message);
             dt.Rows[0]["calories"] = calories;
             dt.Rows[0]["datedrafted"] = datedraftedchanged;
-            Exception ex3 = Assert.Throws<Exception>(()=> Recipe.Save(dt));
+            Exception ex3 = Assert.Throws<Exception>(() => Recipe.Save(dt));
             TestContext.WriteLine(ex3.Message);
         }
 
@@ -158,9 +160,10 @@ namespace RecipeTest
             Assume.That(recipeid > 0, "No recipes without ingredients or instructions that either has a status of drafted or archived for more than 30 days, can't run test");
             TestContext.WriteLine("Existing recipe without ingredients or instructions, that either has a status of drafted or archived for more than 30 days, where recipeid = " + recipeid + ", " + recipename);
             TestContext.WriteLine("Ensure that app can delete recipe where recipeid = " + recipeid);
-            Recipe.Delete(dt);
+            bizRecipe rec = new();
+            rec.Delete(dt);
             DataTable dtafterdelete = GetDataTable("Select * from recipe where recipeid = " + recipeid);
-            Assert.IsTrue(dtafterdelete.Rows.Count == 0, "Record where recipeid = " + recipeid + ", " + recipename + " still exists in DB");
+            ClassicAssert.IsTrue(dtafterdelete.Rows.Count == 0, "Record where recipeid = " + recipeid + ", " + recipename + " still exists in DB");
             TestContext.WriteLine("Record where recipeid = " + recipeid + ", " + recipename + " does not exist anymore in DB");
         }
 
@@ -187,7 +190,8 @@ namespace RecipeTest
             Assume.That(recipeid > 0, "No recipes with foreign key references, can't run test");
             TestContext.WriteLine("Existing recipe with foreign key references, where recipeid = " + recipeid + ", " + recipename);
             TestContext.WriteLine("Ensure that app cannot delete recipe where recipeid = " + recipeid + " since it has foreign key references");
-            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(dt));
+            bizRecipe rec = new();
+            Exception ex = Assert.Throws<Exception>(() => rec.Delete(dt));
             TestContext.WriteLine("Recipe where recipeid = " + recipeid + " was not deleted: " + ex.Message);
         }
 
@@ -220,7 +224,8 @@ namespace RecipeTest
             Assume.That(recipeid > 0, "No recipes that either has a status of published or archived for less than 30 days, can't run test");
             TestContext.WriteLine("Existing recipe  that either has a status of published or archived for less than 30 days, where recipeid = " + recipeid + ", " + recipename);
             TestContext.WriteLine("Ensure that app cannot delete recipe where recipeid = " + recipeid + " since it either has a status of published or archived for less than 30 days");
-            Exception ex = Assert.Throws<Exception>(()=>Recipe.Delete(dt));
+            bizRecipe rec = new();
+            Exception ex = Assert.Throws<Exception>(() => rec.Delete(dt));
             TestContext.WriteLine("Recipe where recipeid = " + recipeid + " was not deleted: " + ex.Message);
         }
 
@@ -232,10 +237,11 @@ namespace RecipeTest
             Assume.That(recipeid > 0, "No recipes in DB, can't run test");
             TestContext.WriteLine("Existing recipe where recipeid = " + recipeid + " and recipename = " + recipename);
             TestContext.WriteLine("Ensure that app loads recipe where recipeid = " + recipeid + " and recipename =  " + recipename);
-            DataTable dt = Recipe.LoadRecipe(recipeid);
+            bizRecipe rec = new();
+            DataTable dt = rec.Load(recipeid);
             int loadedid = (int)dt.Rows[0]["recipeid"];
             string loadedrecipename = dt.Rows[0]["recipename"].ToString();
-            Assert.IsTrue(loadedid == recipeid && loadedrecipename == recipename, loadedid + " <> " + recipeid + " and " + loadedrecipename + " <> " + recipename);
+            ClassicAssert.IsTrue(loadedid == recipeid && loadedrecipename == recipename, loadedid + " <> " + recipeid + " and " + loadedrecipename + " <> " + recipename);
             TestContext.WriteLine("Loaded recipe where recipeid = " + loadedid + " and recipename = " + loadedrecipename);
         }
 
@@ -251,7 +257,7 @@ namespace RecipeTest
             DataTable dt = Recipe.Search(criteria);
             int results = dt.Rows.Count;
 
-            Assert.IsTrue(results == num, "Results of the recipe search do not match the num of recipes: " + results + " <> " + num);
+            ClassicAssert.IsTrue(results == num, "Results of the recipe search do not match the num of recipes: " + results + " <> " + num);
             TestContext.WriteLine("Num of Rows returned by recipe search is " + results);
         }
 
@@ -263,7 +269,7 @@ namespace RecipeTest
             TestContext.WriteLine("Num of cuisines in DB = " + cuisinecount);
             TestContext.WriteLine("Ensure that the num of rows in Cuisines returned by app = " + cuisinecount);
             DataTable dt = Recipe.GetCuisines();
-            Assert.IsTrue(dt.Rows.Count == cuisinecount, "Num of rows in Cuisine returned by app (" + dt.Rows.Count + ") <> " + cuisinecount);
+            ClassicAssert.IsTrue(dt.Rows.Count == cuisinecount, "Num of rows in Cuisine returned by app (" + dt.Rows.Count + ") <> " + cuisinecount);
             TestContext.WriteLine("Num of rows in Cuisines returned by app = " + dt.Rows.Count);
         }
 
@@ -275,7 +281,7 @@ namespace RecipeTest
             TestContext.WriteLine("Num of staff members in DB = " + staffcount);
             TestContext.WriteLine("Ensure that the num of rows in Staff returned by app = " + staffcount);
             DataTable dt = Recipe.GetStaff();
-            Assert.IsTrue(dt.Rows.Count == staffcount, "Num of rows in Staff returned by app (" + dt.Rows.Count + ") <> " + staffcount);
+            ClassicAssert.IsTrue(dt.Rows.Count == staffcount, "Num of rows in Staff returned by app (" + dt.Rows.Count + ") <> " + staffcount);
             TestContext.WriteLine("Num of rows in Staff returned by app = " + dt.Rows.Count);
         }
         private int GetExistingRecipeId()
