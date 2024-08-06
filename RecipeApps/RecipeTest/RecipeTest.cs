@@ -42,29 +42,40 @@
 
         public void InsertNewRecipe()
         {
-            DataTable dt = GetDataTable("Select * from recipe where recipeid = 0");
-            DataRow r = dt.Rows.Add();
-            Assume.That(dt.Rows.Count == 1);
             int staffid = GetFirstColumnFirstRowValue("Select top 1 s.staffid from staff s");
             Assume.That(staffid > 0, "No staff in DB, can't run test");
             int cuisineid = GetFirstColumnFirstRowValue("Select top 1 c.cuisineid from cuisine c");
             Assume.That(cuisineid > 0, "No cuisines in DB, can't run test");
             string recipename = "New delicious food created " + GetFirstColumnFirstRowString("Select getdate()");
             int calories = 100;
+            DateTime datedrafted = DateTime.Now;
 
-            TestContext.WriteLine("Insert recipe: recipename = " + recipename + ", staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories);
+            TestContext.WriteLine("Insert recipe: recipename = " + recipename + ", staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", datedrafted = " + datedrafted);
 
-            r["staffid"] = staffid;
-            r["cuisineid"] = cuisineid;
-            r["recipename"] = recipename;
-            r["calories"] = calories;
             bizRecipe rec = new();
-            rec.Save(dt);
+
+            rec.StaffId = staffid;
+            rec.CuisineId = cuisineid;
+            rec.RecipeName = recipename;
+            rec.Calories = calories;
+            rec.DateDrafted = datedrafted;
+
+            rec.Save();
 
             int newrecipeid = GetFirstColumnFirstRowValue("Select recipeid from Recipe where recipename = " + "'" + recipename + "'");
+            int pkid = rec.RecipeId;
 
-            ClassicAssert.IsTrue(newrecipeid > 0, "Recipe with recipename = " + recipename + "staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", is not found in db");
-            TestContext.WriteLine("Recipe with staffid = " + staffid + ", cuisineid = " + cuisineid + ", recipename = " + recipename + ", calories = " + calories + ", is found in db with pk value = " + newrecipeid);
+            string recipestatus = GetFirstColumnFirstRowString($"Select recipestatus from recipe where RecipeId = {pkid}");
+            string recipepic = GetFirstColumnFirstRowString($"Select recipepic from recipe where RecipeId = {pkid}");
+            rec.RecipeStatus = recipestatus;
+            rec.RecipePic = recipepic;
+
+            rec.Save();
+
+            ClassicAssert.IsTrue(newrecipeid > 0, "Recipe with recipename = " + recipename + "staffid = " + staffid + ", cuisineid = " + cuisineid + ", calories = " + calories + ", datedrafted = " + datedrafted + ", recipestatus = " + recipestatus + ", recipepic = " + recipepic + ", is not found in db");
+            ClassicAssert.IsTrue(pkid > 0, "Primary key not updated in datatable");
+            TestContext.WriteLine("Recipe with staffid = " + staffid + ", cuisineid = " + cuisineid + ", recipename = " + recipename + ", calories = " + calories + ", datedrafted = " + datedrafted + ", recipestatus = " + recipestatus + ", recipepic = " + recipepic + ", is found in db with pk value = " + newrecipeid);
+            TestContext.WriteLine("new primary key = " + pkid);
         }
 
         [Test]
@@ -134,9 +145,7 @@
             TestContext.WriteLine(ex3.Message);
         }
 
-
-        [Test]
-        public void Delete()
+        private DataTable GetRecForDelete()
         {
             string sql = @"
             Select top 1 r.recipeid, r.recipename 
@@ -148,8 +157,15 @@
             where ri.ingredientid is null 
             and n.instructionsid is null
             and (r.RecipeStatus = 'drafted' or (r.RecipeStatus = 'archived' and DateDiff(day, r.DateArchived, GETDATE()) < 30))"
-            ;
+;
             DataTable dt = GetDataTable(sql);
+            return dt;
+        }
+
+        [Test]
+        public void Delete()
+        {
+            DataTable dt = GetRecForDelete();
             int recipeid = 0;
             string recipename = "";
             if (dt.Rows.Count > 0)
@@ -161,6 +177,7 @@
             TestContext.WriteLine("Existing recipe without ingredients or instructions, that either has a status of drafted or archived for more than 30 days, where recipeid = " + recipeid + ", " + recipename);
             TestContext.WriteLine("Ensure that app can delete recipe where recipeid = " + recipeid);
             bizRecipe rec = new();
+            rec.Load(recipeid);
             rec.Delete(dt);
             DataTable dtafterdelete = GetDataTable("Select * from recipe where recipeid = " + recipeid);
             ClassicAssert.IsTrue(dtafterdelete.Rows.Count == 0, "Record where recipeid = " + recipeid + ", " + recipename + " still exists in DB");
@@ -238,9 +255,9 @@
             TestContext.WriteLine("Existing recipe where recipeid = " + recipeid + " and recipename = " + recipename);
             TestContext.WriteLine("Ensure that app loads recipe where recipeid = " + recipeid + " and recipename =  " + recipename);
             bizRecipe rec = new();
-            DataTable dt = rec.Load(recipeid);
-            int loadedid = (int)dt.Rows[0]["recipeid"];
-            string loadedrecipename = dt.Rows[0]["recipename"].ToString();
+            rec.Load(recipeid);
+            int loadedid = rec.RecipeId;
+            string loadedrecipename = rec.RecipeName;
             ClassicAssert.IsTrue(loadedid == recipeid && loadedrecipename == recipename, loadedid + " <> " + recipeid + " and " + loadedrecipename + " <> " + recipename);
             TestContext.WriteLine("Loaded recipe where recipeid = " + loadedid + " and recipename = " + loadedrecipename);
         }
