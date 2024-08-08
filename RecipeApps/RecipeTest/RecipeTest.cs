@@ -263,22 +263,6 @@
         }
 
         [Test]
-        public void Search()
-        {
-            string criteria = "e";
-            int num = GetFirstColumnFirstRowValue("select total = count(*) from recipe where recipename like '%" + criteria + "%'");
-            Assume.That(num > 0, "There are no recipes that match the search for a recipe name that contains " + criteria);
-            TestContext.WriteLine(num + " recipes where the recipe name contains " + criteria);
-            TestContext.WriteLine("Ensure that the recipe search returns " + num + " rows");
-
-            DataTable dt = Recipe.Search(criteria);
-            int results = dt.Rows.Count;
-
-            ClassicAssert.IsTrue(results == num, "Results of the recipe search do not match the num of recipes: " + results + " <> " + num);
-            TestContext.WriteLine("Num of Rows returned by recipe search is " + results);
-        }
-
-        [Test]
         public void GetCuisines()
         {
             int cuisinecount = GetFirstColumnFirstRowValue("Select total = count(*) from Cuisine");
@@ -300,6 +284,67 @@
             DataTable dt = Recipe.GetStaff();
             ClassicAssert.IsTrue(dt.Rows.Count == staffcount, "Num of rows in Staff returned by app (" + dt.Rows.Count + ") <> " + staffcount);
             TestContext.WriteLine("Num of rows in Staff returned by app = " + dt.Rows.Count);
+        }
+
+        [Test]
+        public void GetRecipeList()
+        {
+            int recipecount = GetFirstColumnFirstRowValue("Select total = count(*) from Recipe");
+            Assume.That(recipecount > 0, "No recipes in DB, can't run test");
+            TestContext.WriteLine("Num of Recipes in DB = " + recipecount);
+            TestContext.WriteLine("Ensure that Num of recipes returned matches " + recipecount);
+            bizRecipe r = new();
+            var lst = r.GetList();
+
+            ClassicAssert.IsTrue(lst.Count == recipecount, "Num recipes returned (" + lst.Count + ") <> " + recipecount);
+            TestContext.WriteLine("Num of recipes returned = " +  lst.Count);
+        }
+
+        [Test]
+        public void SearchRecipes()
+        {
+            string criteria = "e";
+            int recipecount = GetFirstColumnFirstRowValue("select total = count(*) from recipe where recipename like '%" + criteria + "%'");
+            Assume.That(recipecount > 0, "There are no recipes that match the search for a recipe name that contains " + criteria);
+            TestContext.WriteLine(recipecount + " recipes where the recipe name contains " + criteria + " in DB");
+            TestContext.WriteLine("Ensure that the recipe search returns " + recipecount + " recipes");
+
+            bizRecipe r = new();
+            List<bizRecipe> lst = r.Search(criteria);
+
+            ClassicAssert.IsTrue(lst.Count == recipecount, "Results of the recipe search do not match the num of recipes in DB: " + lst.Count + " <> " + recipecount);
+            TestContext.WriteLine("Num of results returned by the recipe search is " + lst.Count);
+        }
+
+        [Test]
+        public void GetIngredientList()
+        {
+            int ingredientcount = GetFirstColumnFirstRowValue("Select total = count(*) from Ingredient");
+            Assume.That(ingredientcount > 0, "No ingredients in DB, can't run test");
+            TestContext.WriteLine("Num of Ingredients in DB = " + ingredientcount);
+            TestContext.WriteLine("Ensure that Num of ingredients returned matches " + ingredientcount);
+
+            bizIngredient i = new();
+            var lst = i.GetList();
+
+            ClassicAssert.IsTrue(lst.Count == ingredientcount, "Num ingredients returned (" + lst.Count + ") <> " + ingredientcount);
+            TestContext.WriteLine("Num of ingredients returned = " + lst.Count);
+        }
+
+        [Test]
+        public void SearchIngredients()
+        {
+            string criteria = "i";
+            int ingredientcount = GetFirstColumnFirstRowValue("select total = count(*) from ingredient where ingredientname like '%" + criteria + "%'");
+            Assume.That(ingredientcount > 0, "There are no ingredients that match the search for an ingredient name that contains " + criteria);
+            TestContext.WriteLine(ingredientcount + " ingredients where the ingredient name contains " + criteria + " in DB");
+            TestContext.WriteLine("Ensure that the ingredient search returns " + ingredientcount + " ingredients");
+
+            bizIngredient i = new();
+            List<bizIngredient> lst = i.Search(criteria);
+
+            ClassicAssert.IsTrue(lst.Count == ingredientcount, "Results of the ingredient search do not match the num of ingredients in DB: " + lst.Count + " <> " + ingredientcount);
+            TestContext.WriteLine("Num of results returned by the ingredient search is " + lst.Count);
         }
         private int GetExistingRecipeId()
         {

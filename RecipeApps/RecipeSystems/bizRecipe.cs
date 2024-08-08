@@ -1,6 +1,6 @@
 ﻿namespace RecipeSystems
 {
-    public class bizRecipe : bizObject
+    public class bizRecipe : bizObject<bizRecipe>
     {
         public bizRecipe()
         {
@@ -18,6 +18,14 @@
         private string _recipestatus = "";
         private string _recipepic = "";
 
+        public List<bizRecipe> Search(string recipenameval)
+        {
+            SqlCommand cmd = SQLUtility.GetSqlCommand(this.GetsprocName);
+            SQLUtility.SetParamValue(cmd, "@RecipeName", recipenameval);
+            DataTable dt = SQLUtility.GetDataTable(cmd);
+            return this.GetListFromDataTable(dt);
+        }
+
         public int RecipeId
         {
             get => _recipeid;
@@ -33,7 +41,7 @@
 
         public int StaffId
         {
-            get => _staffid;
+            get => _staffid;  
             set
             {
                 if (_staffid != value)
